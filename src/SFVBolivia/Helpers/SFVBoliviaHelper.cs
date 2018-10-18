@@ -20,8 +20,9 @@ namespace SFVBolivia.Helpers
         {
         }
 
-        public void GetQRCode()
+        public void GetQRCode(Bill bill)
         {
+
         }
 
         public void GetText()
