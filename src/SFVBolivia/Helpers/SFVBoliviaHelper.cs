@@ -11,13 +11,25 @@ namespace SFVBolivia.Helpers
         public void GetVerhoeffCheckDigit()
         {
         }
-
-        public String GetRC4Ciphertext(String message, String key)
+       
+        /// <summary>
+        /// Gets the RC4 cipher text.
+        /// </summary>
+        /// <param name="message"> Message to cipher.</param>
+        /// <param name="key"> Key to cipher.</param>
+        /// <returns>A Cipher text.</returns>
+        public string GetRC4Ciphertext(string message, string key)
         {
             int[] state = Enumerable.Range(0, 256).ToArray();
             return  MessageCipher(message, KeyCipher(key, state));
         }
 
+        /// <summary>
+        /// Gets the Array state with the key cipher.
+        /// </summary>
+        /// <param name="key"> Key text to cipher.</param>
+        /// <param name="state"> Array state.</param>
+        /// <returns>A Array state with the key cipher</returns>
         private int[] KeyCipher(string key, int[] state)
         {
             int index1 = 0, index2 = 0;
@@ -29,10 +41,16 @@ namespace SFVBolivia.Helpers
             return state;
         }
 
-        private String MessageCipher(string message, int[] state)
+        /// <summary>
+        /// Gets the text with the message cipher.
+        /// </summary>
+        /// <param name="message">Message text to cipher.</param>
+        /// <param name="state">Array state with the key cipher</param>
+        /// <returns>A text message cipher</returns>
+         private string MessageCipher(string message, int[] state)
         {
             int index1 = 0, index2 = 0;
-            String messageCipher = "";
+            string messageCipher = "";
             foreach (int i in Enumerable.Range(0, message.Length))
             {
                 index1 = (index1 + 1) % 256;
@@ -44,6 +62,13 @@ namespace SFVBolivia.Helpers
             return messageCipher.Substring(1, messageCipher.Length - 1);
         }
 
+        /// <summary>
+        /// Swaps the values of two positions of the state array.
+        /// </summary>
+        /// <param name="state">State array.</param>
+        /// <param name="index1">The first position to swap.</param>
+        /// <param name="index2">The second position to swap.</param>
+        /// <returns>The array state with the swap values</returns>
         private int[] Swap(int[] state, int index1, int index2)
         {
             int temp = state[index2];
