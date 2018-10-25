@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SFVBolivia.Helpers;
 
 namespace SFVBoliviaTest
@@ -7,7 +6,7 @@ namespace SFVBoliviaTest
     [TestClass]
     public class SFVBoliviaHelperTest
     {
-        SFVBoliviaHelper helper = new SFVBoliviaHelper();
+        private SFVBoliviaHelper helper = new SFVBoliviaHelper();
 
         [TestMethod]
         public void GetVerhoeffCheckDigitCaseOneValueTest()
@@ -92,11 +91,11 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetVerhoeffCheckDigitCaseElevenTest()
         {
-            SFVBoliviaHelper helper = new SFVBoliviaHelper();
             int verhoeffDigitGenerated = helper.GetVerhoeffCheckDigit("4209253717027162");
             int expectedVerhoeffDigit = 1;
             Assert.AreEqual(expectedVerhoeffDigit, verhoeffDigitGenerated);
         }
+
         [TestMethod]
         public void GetBase64EncodedStringOfZeroValueTest()
         {
@@ -127,6 +126,30 @@ namespace SFVBoliviaTest
             string generatedResult = helper.GetBase64(204986118);
             string expectedResult = "CDzS6";
             Assert.AreEqual(expectedResult, generatedResult);
+        }
+
+        [TestMethod]
+        public void GetRC4CiphertextTest()
+        {
+            string actualMessageCiffer = helper.GetRC4Ciphertext("d3Ir6", "sesamo");
+            string expectedMessageCiffer = "EB-06-AE-F8-92";
+            Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
+        }
+
+        [TestMethod]
+        public void GetRC4CiphertextLongPasswordTest()
+        {
+            string actualMessageCiffer = helper.GetRC4Ciphertext("IUKYo", "XBCPY-GKGX4-PGK44-8B632-X9P33");
+            string expectedMessageCiffer = "83-62-FC-B0-F0";
+            Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
+        }
+
+        [TestMethod]
+        public void GetRC4CiphertextComplexPasswordTest()
+        {
+            string actualMessageCiffer = helper.GetRC4Ciphertext("piWCp", "Aa1-bb2-Cc3-Dd4");
+            string expectedMessageCiffer = "37-71-2E-14-A0";
+            Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
     }
 }
