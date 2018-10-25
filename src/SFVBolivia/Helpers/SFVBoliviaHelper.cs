@@ -33,9 +33,8 @@ namespace SFVBolivia.Helpers
     /// <summary>
     /// Get a Verhoeff digit by number.
     /// </summary>
-    /// <value>Number to generate.</value>
-    /// <remarks> The number must be string.
-    /// </remarks>
+    /// <param name="number"> Number to generate.</param>
+    /// <returns>A Verhoeef digit.</returns>
     public int GetVerhoeffCheckDigit(string number)
     {
       int lastindex = number.Length - 1;
