@@ -8,6 +8,12 @@ namespace SFVBolivia.Helpers
 {
     public class SFVBoliviaHelper
     {
+        /// <summary>
+        /// Get a Verhoeff digit by number.
+        /// </summary>
+        /// <value>Number to generate.</value>
+        /// <remarks> The number must be string.
+        /// </remarks>
         public int GetVerhoeffCheckDigit(string number)
         {
           int[,] multiply = new int[,] { { 0,1,2,3,4,5,6,7,8,9 },
