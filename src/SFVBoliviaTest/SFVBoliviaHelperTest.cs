@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SFVBolivia.Helpers;
+using System.Drawing;
 
 namespace SFVBoliviaTest
 {
@@ -16,8 +17,9 @@ namespace SFVBoliviaTest
               
 
         [TestMethod]
-        public void GetBase64EncodedStringOfZeroValueTest()
+        public void getQRCode()
         {
+            // Given
             int billNumber = 10;
             long authorization = 132002430;
             DateTime date = DateTime.Now.Date;
@@ -27,10 +29,13 @@ namespace SFVBoliviaTest
             long nITRecep = 3763395;
             UserIssuer userIssuer = new UserIssuer("Graciela Loayza", 352687016, "Av. Siles 2018");
             Bill bill = new Bill(billNumber, authorization, date, amount, amountFiscalCredit,
-                controlCode, nITRecep, userIssuer);
-            helper.GetQRCode(bill);
+            controlCode, nITRecep, userIssuer);
+           
+            // When
+            Bitmap qrCode = helper.GetQRCode(bill.ToString());
 
-            Assert.AreEqual("a", "a");
+            // Then
+            Assert.IsInstanceOfType(qrCode, typeof(Bitmap));
         }
     }
 

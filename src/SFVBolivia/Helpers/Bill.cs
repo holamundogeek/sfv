@@ -8,41 +8,46 @@ namespace SFVBolivia.Helpers
 {
     public class Bill
     {
-        private int billNumber;
-        private long authorization;
-        private DateTime date;
-        private double amount;
-        private double amountFiscalCredit;
-        private string controlCode;
-        private long nITRecep;
-        private UserIssuer userIssuer;
+        public int BillNumber { get; set; }
+        public long Authorization;
+        public DateTime Date;
+        public double Amount;
+        public double AmountFiscalCredit;
+        public string ControlCode;
+        public long NITRecep;
+        public UserIssuer UserIssuer;
 
             
             public int MyProperty { get; set; }
 
         public Bill()
         {
-            this.billNumber = 0;
-            this.authorization = 0;
-            this.date = DateTime.Now.Date;
-            this.amount = 0;
-            this.amountFiscalCredit = 0;
-            this.controlCode = "";
-            this.nITRecep = 0;
-            this.userIssuer = new UserIssuer();
+            this.BillNumber = 0;
+            this.Authorization = 0;
+            this.Date = DateTime.Now.Date;
+            this.Amount = 0;
+            this.AmountFiscalCredit = 0;
+            this.ControlCode = "";
+            this.NITRecep = 0;
+            this.UserIssuer = new UserIssuer();
         }
 
         public Bill(int billNumber, long authorization, DateTime date, 
             double amount, double amountFiscalCredit, string controlCode, long nITRecep, UserIssuer userIssuer)
         {
-            this.billNumber = billNumber;
-            this.authorization = authorization;
-            this.date = date;
-            this.amount = amount;
-            this.amountFiscalCredit = amountFiscalCredit;
-            this.controlCode = controlCode;
-            this.nITRecep = nITRecep;
-            this.userIssuer = userIssuer;
+            this.BillNumber = billNumber;
+            this.Authorization = authorization;
+            this.Date = date;
+            this.Amount = amount;
+            this.AmountFiscalCredit = amountFiscalCredit;
+            this.ControlCode = controlCode;
+            this.NITRecep = nITRecep;
+            this.UserIssuer = userIssuer;
+        }
+
+        public override string ToString()
+        {
+            return BillNumber + "|" + Authorization + "|" + Date + "|" + Amount + "|" + AmountFiscalCredit + "|" + ControlCode + "|" + NITRecep + "|" + UserIssuer;
         }
 
     }

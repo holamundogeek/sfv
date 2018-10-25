@@ -8,21 +8,22 @@ namespace SFVBolivia.Helpers
 {
     public class User
     {
-        protected long nIT;
+        protected long nit;
+        public long NIT { get; set; }
+
         protected string name;
+        public string Name { get; set; }
 
         public User()
         {
             this.name = "";
-            this.nIT = 0;
+            this.nit = 0;
         }
         public User(string name, long nIT)
         {
-            this.nIT = nIT;
+            this.nit = nIT;
             this.name = name;
         }
-
-        public int MyProperty { get; set; }
 
     }
 }

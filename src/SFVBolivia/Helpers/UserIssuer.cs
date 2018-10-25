@@ -8,16 +8,17 @@ namespace SFVBolivia.Helpers
 {
     public class UserIssuer : User
     {
-        private String address { get; set; }
+        private String address;
+        public String Address { get; set; }
 
         public UserIssuer() {
-            address = "";
+            Address = "";
         }
 
         public UserIssuer(string name, long nIT,  string address)
         {
             this.name = name;
-            this.nIT = nIT;
+            this.nit = nIT;
             this.address = address;
         }
 
