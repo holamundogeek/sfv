@@ -53,6 +53,7 @@
     <Compile Include="Helpers\Bill.cs" />
     <Compile Include="Helpers\User.cs" />
     <Compile Include="Helpers\UserIssuer.cs" />
+    <Compile Include="Helpers\SFVBoliviaExtensions.cs" />
     <Compile Include="SFVBolivia.cs" />
     <Compile Include="Helpers\SFVBoliviaHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
