@@ -37,6 +37,17 @@ namespace SFVBoliviaTest
             // Then
             Assert.IsInstanceOfType(qrCode, typeof(Bitmap));
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "A qRString of null was inappropriately allowed.")]
+        public void illegalArgumentException()
+        {
+            // When
+            string emptyString = null;
+
+            // Then
+            Bitmap qrCode = helper.GetQRCode(emptyString);
+        }
     }
 
     

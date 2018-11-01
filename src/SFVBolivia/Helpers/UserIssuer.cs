@@ -8,11 +8,11 @@ namespace SFVBolivia.Helpers
 {
     public class UserIssuer : User
     {
-        private String address;
-        public String Address { get; set; }
+        private string address;
+        public string Address { get; set; }
 
         public UserIssuer() {
-            Address = "";
+            address = "";
         }
 
         public UserIssuer(string name, long nIT,  string address)
