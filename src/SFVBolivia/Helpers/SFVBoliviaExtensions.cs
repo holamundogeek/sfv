@@ -10,19 +10,46 @@ namespace SFVBolivia.Helpers
     {
         private static SFVBoliviaHelper helper = new SFVBoliviaHelper();
 
-        public static string GetCodeControl()
+        //TODO Complete this implementation
+        public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
+            //Step 1      
+            string verhoeffDigits;
+            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
+
+            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
+            total.AddVerhoeffDigit(5, out verhoeffDigits);
+
+            //Step 2 and 3
+            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+
+            //Step 4
+
             return "";
         }
 
         //Step1
-        public static void AddVerhoeffDigit()
+        public static long AddVerhoeffDigit(this long number, int digitsNumber, out string verhoeffDigits)
         {
+            verhoeffDigits = "";
+            string numberStr = number.ToString();
+            for (int i = 0; i < digitsNumber; i++)
+            {
+                var verhoeffDigit = helper.GetVerhoeffCheckDigit(numberStr);
+                verhoeffDigits = $"{verhoeffDigits}{verhoeffDigit}";
+                numberStr = $"{number}{verhoeffDigit}";
+            }
+
+            return long.Parse(numberStr);
         }
 
         //Step 2 and 3
-        public static void GetPartialAllegedRC4()
+        public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
+            return "";
         }
 
         //Step 4
