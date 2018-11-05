@@ -14,15 +14,8 @@ namespace SFVBolivia.Helpers
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             //Step 1      
-            string verhoeffDigits;
-            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
-
-            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
-            total.AddVerhoeffDigit(5, out verhoeffDigits);
-
+            string verhoeffDigits = AddBillData(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+        
             //Step 2 and 3
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
 
@@ -31,7 +24,13 @@ namespace SFVBolivia.Helpers
             return "";
         }
 
-        //Step1
+        /// <summary>
+        /// This method number of verhoeff digit to an expecific number.
+        /// </summary>
+        /// <param name="number">to concat verhoeff digits</param>
+        /// <param name="digitsNumber">number to add</param>
+        /// <param name="verhoeffDigits">concat generated for number</param>
+        /// <returns>number concat with verhoeff digits</returns>
         public static long AddVerhoeffDigit(this long number, int digitsNumber, out string verhoeffDigits)
         {
             verhoeffDigits = "";
@@ -44,6 +43,31 @@ namespace SFVBolivia.Helpers
             }
 
             return long.Parse(numberStr);
+        }
+
+        /// <summary>
+        ///  THis method implements logic to retrieve last 5 verhoeff digits.
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <param name="nitOrCi">client identification</param>
+        /// <param name="transactionDate"> date YYYYmmdd</param>
+        /// <param name="transactionAmount">bill total</param>
+        /// <returns>last 5 verhoeff digits</returns>
+        public static string AddBillData(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
+        {
+            //Retrieve verhoeff digit per each bill data and concat it.
+            string verhoeffDigits;
+            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
+
+            // Add bill data
+            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
+            total.AddVerhoeffDigit(5, out verhoeffDigits);
+
+            // Return last five verhoeff digits
+            return verhoeffDigits;
         }
 
         //Step 2 and 3
