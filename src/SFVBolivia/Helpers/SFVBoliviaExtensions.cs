@@ -46,7 +46,17 @@ namespace SFVBolivia.Helpers
             return long.Parse(numberStr);
         }
 
-        //Step 2 and 3
+        /// <summary>
+        /// This method is to get partial allegedRC4 value.
+        /// </summary>
+        /// <param name="verhoeffDigits">the verhoeff digit generated previously</param>
+        /// <param name="authorizationNumber">number of authorization with verhoeff digits.</param>
+        /// <param name="invoiceNumber">number of invoice with verhoeff digits.</param>
+        /// <param name="nitOrCi">number of NIT or CI with verhoeff digits.</param>
+        /// <param name="transactionDate">the transaction date with verhoeff digits.</param>
+        /// <param name="transactionAmount">the transaction amount with verhoeff digits.</param>
+        /// <param name="dosingKey">the dosing key.</param>
+        /// <returns>A partial alleged RC4 value</returns>
         public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             List<string> splitDosingKey = new List<string>();
