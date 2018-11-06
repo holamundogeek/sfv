@@ -40,7 +40,7 @@ namespace SFVBolivia.Helpers
             {
                 var verhoeffDigit = helper.GetVerhoeffCheckDigit(numberStr);
                 verhoeffDigits = $"{verhoeffDigits}{verhoeffDigit}";
-                numberStr = $"{number}{verhoeffDigit}";
+                numberStr = $"{numberStr}{verhoeffDigit}";
             }
 
             return long.Parse(numberStr);
@@ -49,7 +49,19 @@ namespace SFVBolivia.Helpers
         //Step 2 and 3
         public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
-            return "";
+            List<string> splitDosingKey = new List<string>();
+            string auxDosingKey = dosingKey;
+            verhoeffDigits.ToList().ForEach(n => {
+                int verhoeffDigit = Int32.Parse(n.ToString());
+                verhoeffDigit = verhoeffDigit == 9 ? 0 : verhoeffDigit + 1;
+                splitDosingKey.Add(auxDosingKey.Substring(0, verhoeffDigit));
+                auxDosingKey = auxDosingKey.Substring(verhoeffDigit);
+            });
+            string concat = $"{authorizationNumber}{splitDosingKey.ElementAt(0)}{invoiceNumber}{splitDosingKey.ElementAt(1)}" +
+                            $"{nitOrCi}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
+                            $"{transactionAmount}{splitDosingKey.ElementAt(4)}";
+            string newDosingKey = $"{dosingKey}{verhoeffDigits}";
+            return helper.GetRC4Ciphertext(concat, newDosingKey);
         }
 
         //Step 4
