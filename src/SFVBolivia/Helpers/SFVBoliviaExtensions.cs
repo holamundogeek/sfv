@@ -71,7 +71,7 @@ namespace SFVBolivia.Helpers
                             $"{nitOrCi}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
                             $"{transactionAmount}{splitDosingKey.ElementAt(4)}";
             string newDosingKey = $"{dosingKey}{verhoeffDigits}";
-            return helper.GetRC4Ciphertext(concat, newDosingKey);
+            return helper.GetRC4Ciphertext(concat, newDosingKey).Replace("-", string.Empty);
         }
 
         //Step 4

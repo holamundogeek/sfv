@@ -40,7 +40,7 @@ namespace SFVBoliviaTest
             string dosingKey = "9rCB7Sv4X29d)5k7N%3ab89p-3(5[A";
             string allegedRC4 = SFVBoliviaExtensions.GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
             string expected = "69DD0A42536C9900C4AE6484726C122ABDBF95D80A4BA403FB7834B3EC2A88595E2149A3D965923BA4547B42B9528AAE7B8CFB9996BA2B58516913057C9D791B6B748A";
-            Assert.AreEqual(expected, allegedRC4.Replace("-", String.Empty));
+            Assert.AreEqual(expected, allegedRC4);
         }
     }
 }
