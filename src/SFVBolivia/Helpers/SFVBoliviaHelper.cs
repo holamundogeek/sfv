@@ -147,5 +147,115 @@ namespace SFVBolivia.Helpers
 
             return state;
         }
+
+        /// <summary>
+        /// Convert a number to literal.
+        /// </summary>
+        /// <param name="number">is the number to converts.</param>
+        /// <returns>literal of a number.</returns>
+        public String ConvertToLiteral(int number) {
+            StringBuilder result = new StringBuilder();
+            int exponente = CountDigits(number) - 1;
+            Dictionary<int, string> numbers = FillDictionary();
+
+            int num, numReal;
+            while (number > 0) {
+                num = number / ((int) Math.pow(10, exponente));
+                numReal = num * ((int) Math.pow(10, exponente));
+                result.append(numbers.get(numReal)).append(" ");
+
+                if (IsTens(numReal)) {
+                    result.append(" y ");
+                }
+
+                number = number % ((int) Math.pow(10, exponente));
+                exponente --;
+
+                if (number < 20) {
+                    result.append(numbers.get(number));
+                    number = 0;
+                }
+            }
+
+            return result.toString();
+        }
+
+        /// <summary>
+        /// Count the number digits.
+        /// </summary>
+        /// <param name="number">is the number to counts.</param>
+        /// <returns>the quantity of digits.</returns>
+        private int CountDigits(int number) {
+            int count = 0;
+            while(number != 0){
+                number /= 10;
+                count ++;
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// Verify if a number is a tens.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a tens, otherwise false.</returns>
+        private boolean IsTens(int number)
+        {
+            return (number / 10 < 10) && (number / 10) != 0;
+        }
+
+        /// <summary>
+        /// Fill a dictionary with specific values.
+        /// </summary>
+        /// <returns>the dictionary filled.</returns>
+        private Dictionary<int, string> FillDictionary()
+        {
+            Dictionary<int, string> numbers = new Dictionary<int, string>();
+            numbers.add(0, "cero");
+            numbers.add(1, "uno");
+            numbers.add(2, "dos");
+            numbers.add(3, "tres");
+            numbers.add(4, "cuatro");
+            numbers.add(5, "cinco");
+            numbers.add(6, "seis");
+            numbers.add(7, "siete");
+            numbers.add(8, "ocho");
+            numbers.add(9, "nueve");
+            numbers.add(10, "diez");
+
+            numbers.add(11, "once");
+            numbers.add(12, "doce");
+            numbers.add(13, "trece");
+            numbers.add(14, "catorce");
+            numbers.add(15, "quince");
+            numbers.add(16, "dieciseis");
+            numbers.add(17, "diecisiete");
+            numbers.add(18, "dieciocho");
+            numbers.add(19, "diecinueve");
+
+            numbers.add(20, "veinte");
+            numbers.add(30, "treinta");
+            numbers.add(40, "cuarenta");
+            numbers.add(50, "cincuenta");
+            numbers.add(60, "sesenta");
+            numbers.add(70, "setenta");
+            numbers.add(80, "ochenta");
+            numbers.add(90, "noventa");
+
+            numbers.add(100, "cien");
+            numbers.add(200, "doscientos");
+            numbers.add(300, "trescientos");
+            numbers.add(400, "cuatrocientos");
+            numbers.add(500, "quinientos");
+            numbers.add(600, "seiscientos");
+            numbers.add(700, "setecientos");
+            numbers.add(800, "ochocientos");
+            numbers.add(900, "novecientos");
+
+            numbers.add(1000, "mil");
+
+            return numbers;
+        }
     }
 }
