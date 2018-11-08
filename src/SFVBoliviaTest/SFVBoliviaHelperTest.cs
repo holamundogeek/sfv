@@ -151,5 +151,13 @@ namespace SFVBoliviaTest
             string expectedMessageCiffer = "37-71-2E-14-A0";
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
+
+        [TestMethod]
+        public void GetLiteralNumberTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(953);
+            string expectedLiteral = "novecientos cincuenta  y tres";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
     }
 }
