@@ -28,6 +28,10 @@ namespace SFVBolivia.Helpers
 
             //Step 4
 
+
+            //Step   5
+           
+
             return "";
         }
 
@@ -58,8 +62,17 @@ namespace SFVBolivia.Helpers
         }
 
         //Step 5 and 6
-        public static void GetFinalAllegedRC4()
+        public static string GetFinalAllegedRC4(string verhoeffDigits, int[] partialSumsArray, string dosinKey)
         {
+            List<int> numbers = verhoeffDigits.Select(digit => int.Parse(digit.ToString())).ToList();
+            int spIndex = 0;
+            int totalTruncSum = 0;
+            int totalSum = partialSumsArray.Sum();
+            numbers.ForEach(number => {
+                totalTruncSum += ((totalSum * partialSumsArray[spIndex]) / (number + 1));
+                spIndex++;
+            });
+            return helper.GetRC4Ciphertext(helper.GetBase64(totalTruncSum), $"{dosinKey}{verhoeffDigits}");
         }
 
         public static void FormatCodeControl()
