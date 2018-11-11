@@ -62,7 +62,7 @@ namespace SFVBolivia.Helpers
             List<string> splitDosingKey = new List<string>();
             string auxDosingKey = dosingKey;
             verhoeffDigits.ToList().ForEach(n => {
-                int verhoeffDigit = Int32.Parse(n.ToString());
+                int verhoeffDigit = int.Parse(n.ToString());
                 verhoeffDigit = verhoeffDigit == 9 ? 0 : verhoeffDigit + 1;
                 splitDosingKey.Add(auxDosingKey.Substring(0, verhoeffDigit));
                 auxDosingKey = auxDosingKey.Substring(verhoeffDigit);
