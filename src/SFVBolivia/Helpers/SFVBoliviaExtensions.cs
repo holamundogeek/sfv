@@ -40,16 +40,38 @@ namespace SFVBolivia.Helpers
             {
                 var verhoeffDigit = helper.GetVerhoeffCheckDigit(numberStr);
                 verhoeffDigits = $"{verhoeffDigits}{verhoeffDigit}";
-                numberStr = $"{number}{verhoeffDigit}";
+                numberStr = $"{numberStr}{verhoeffDigit}";
             }
 
             return long.Parse(numberStr);
         }
 
-        //Step 2 and 3
+        /// <summary>
+        /// This method is to get partial allegedRC4 value.
+        /// </summary>
+        /// <param name="verhoeffDigits">the verhoeff digit generated previously</param>
+        /// <param name="authorizationNumber">number of authorization with verhoeff digits.</param>
+        /// <param name="invoiceNumber">number of invoice with verhoeff digits.</param>
+        /// <param name="nitOrCi">number of NIT or CI with verhoeff digits.</param>
+        /// <param name="transactionDate">the transaction date with verhoeff digits.</param>
+        /// <param name="transactionAmount">the transaction amount with verhoeff digits.</param>
+        /// <param name="dosingKey">the dosing key.</param>
+        /// <returns>A partial alleged RC4 value</returns>
         public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
-            return "";
+            List<string> splitDosingKey = new List<string>();
+            string auxDosingKey = dosingKey;
+            verhoeffDigits.ToList().ForEach(n => {
+                int verhoeffDigit = int.Parse(n.ToString());
+                verhoeffDigit = verhoeffDigit == 9 ? 0 : verhoeffDigit + 1;
+                splitDosingKey.Add(auxDosingKey.Substring(0, verhoeffDigit));
+                auxDosingKey = auxDosingKey.Substring(verhoeffDigit);
+            });
+            string concat = $"{authorizationNumber}{splitDosingKey.ElementAt(0)}{invoiceNumber}{splitDosingKey.ElementAt(1)}" +
+                            $"{nitOrCi}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
+                            $"{transactionAmount}{splitDosingKey.ElementAt(4)}";
+            string newDosingKey = $"{dosingKey}{verhoeffDigits}";
+            return helper.GetRC4Ciphertext(concat, newDosingKey).Replace("-", string.Empty);
         }
 
         //Step 4
