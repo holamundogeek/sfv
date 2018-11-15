@@ -65,7 +65,7 @@ namespace SFVBolivia.Helpers
         /// <returns>Bill fields in an specific format</returns>
         public override string ToString()
         {
-            return billNumber + "|" + authorization + "|" + date + "|" + amount + "|" + amountFiscalCredit + "|" + controlCode + "|" + nITRecep + "|" + userIssuer;
+            return $"{billNumber}|{billNumber}|{date}|{amount}|{amountFiscalCredit}|{controlCode}|{nITRecep}|{userIssuer}";
         }
 
     }
