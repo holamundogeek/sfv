@@ -139,17 +139,16 @@ namespace SFVBolivia.Helpers
         private string MessageCipher(string message, int[] state)
         {
             int index1 = 0, index2 = 0;
-            string messageCipher = "";
+            StringBuilder messageCipher = new StringBuilder();
             foreach (int i in Enumerable.Range(0, message.Length))
             {
                 index1 = (index1 + 1) % 256;
                 index2 = (state[index1] + index2) % 256;
                 state = Swap(state, index1, index2);
                 string nMen = (message[i] ^ state[(state[index1] + state[index2]) % 256]).ToString("X");
-                messageCipher = messageCipher + "-" + (nMen.Length == 1 ? "0" + nMen : nMen);
+                messageCipher.Append("-").Append(nMen.Length == 1 ? string.Concat("0", nMen) : nMen);
             }
-
-            return messageCipher.Substring(1, messageCipher.Length - 1);
+            return messageCipher.ToString().Substring(1, messageCipher.Length - 1);
         }
 
         /// <summary>
