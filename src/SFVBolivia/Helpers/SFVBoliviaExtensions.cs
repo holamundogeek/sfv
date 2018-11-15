@@ -14,7 +14,7 @@ namespace SFVBolivia.Helpers
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             //Step 1      
-            string verhoeffDigits = AddBillData(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            string verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
         
             //Step 2 and 3
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
@@ -39,7 +39,7 @@ namespace SFVBolivia.Helpers
             {
                 var verhoeffDigit = helper.GetVerhoeffCheckDigit(numberStr);
                 verhoeffDigits = $"{verhoeffDigits}{verhoeffDigit}";
-                numberStr = $"{number}{verhoeffDigit}";
+                numberStr = $"{numberStr}{verhoeffDigit}";
             }
 
             return long.Parse(numberStr);
@@ -53,7 +53,7 @@ namespace SFVBolivia.Helpers
         /// <param name="transactionDate"> date YYYYmmdd</param>
         /// <param name="transactionAmount">bill total</param>
         /// <returns>last 5 verhoeff digits</returns>
-        public static string AddBillData(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
+        public static string AddVerhoeffDigits(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
         {
             //Retrieve verhoeff digit per each bill data and concat it.
             string verhoeffDigits;
