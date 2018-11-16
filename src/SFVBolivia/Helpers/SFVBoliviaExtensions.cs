@@ -75,8 +75,15 @@ namespace SFVBolivia.Helpers
         }
 
         //Step 4
-        public static void CalculatePartialSum()
+        public static int[] CalculatePartialSum(string hash)
         {
+            int[] sumsArray = new int[6];
+            byte[] asciiBytes = Encoding.ASCII.GetBytes(hash);
+            Enumerable.Range(0, asciiBytes.Length).ToList().ForEach(n => {
+                sumsArray[0] += asciiBytes[n];
+                sumsArray[n + 1 - 5 * (n / 5)] += asciiBytes[n];
+            });
+            return sumsArray;
         }
 
         //Step 5 and 6
