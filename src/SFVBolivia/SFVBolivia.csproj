@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\SFVBoliviaExtensions.cs" />
-    <Compile Include="SFVBolivia.cs" />
+    <Compile Include="SFV.cs" />
     <Compile Include="Helpers\SFVBoliviaHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
