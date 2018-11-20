@@ -42,5 +42,32 @@ namespace SFVBoliviaTest
             string expected = "69DD0A42536C9900C4AE6484726C122ABDBF95D80A4BA403FB7834B3EC2A88595E2149A3D965923BA4547B42B9528AAE7B8CFB9996BA2B58516913057C9D791B6B748A";
             Assert.AreEqual(expected, allegedRC4);
         }
+
+        [TestMethod]
+        public void TestPartialSumsSimple()
+        {
+            string hash = "AAAAA";
+            int[] partialSums = SFVBoliviaExtensions.CalculatePartialSum(hash);
+            int[] expectedPartialSums = { 325, 65, 65, 65, 65, 65};
+            CollectionAssert.AreEqual(expectedPartialSums, partialSums);
+        }
+
+        [TestMethod]
+        public void TestPartialSumsSimpleWithTwoLetters()
+        {
+            string hash = "AAAAABBBBB";
+            int[] partialSums = SFVBoliviaExtensions.CalculatePartialSum(hash);
+            int[] expectedPartialSums = { 655, 131, 131, 131, 131, 131 };
+            CollectionAssert.AreEqual(expectedPartialSums, partialSums);
+        }
+
+        [TestMethod]
+        public void TestPartialSumsComplex()
+        {
+            string hash = "69DD0A42536C9900C4AE6484726C122ABDBF95D80A4BA403FB7834B3EC2A88595E2149A3D965923BA4547B42B9528AAE7B8CFB9996BA2B58516913057C9D791B6B748A";
+            int[] partialSums = SFVBoliviaExtensions.CalculatePartialSum(hash);
+            int[] expectedPartialSums = { 7720, 1548, 1537, 1540, 1565, 1530 };
+            CollectionAssert.AreEqual(expectedPartialSums, partialSums);
+        }
     }
 }

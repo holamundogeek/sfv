@@ -1,15 +1,14 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SFVBolivia.Helpers;
+using System.Collections.Generic;
 using System.Drawing;
-
 
 namespace SFVBoliviaTest
 {
     [TestClass]
     public class SFVBoliviaHelperTest
     {
-
         private SFVBoliviaHelper helper = new SFVBoliviaHelper();
 
         [TestMethod]
@@ -148,7 +147,6 @@ namespace SFVBoliviaTest
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
 
-
         [TestMethod]
         public void GetRC4CiphertextComplexPasswordTest()
         {
@@ -156,7 +154,17 @@ namespace SFVBoliviaTest
             string expectedMessageCiffer = "37-71-2E-14-A0";
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
-              
+
+       [TestMethod]
+        public void GetFinalAllegedRC4Test()
+        {
+            int[] partialSumsArray = new int[] { 1548, 1537, 1540, 1565, 1530 };
+            string dosingKey = "9rCB7Sv4X29d)5k7N%3ab89p-3(5[A";
+            string verhoeffDigits = "71621";
+            string actualMessageCiffer = SFVBoliviaExtensions.GetFinalAllegedRC4(verhoeffDigits, partialSumsArray, dosingKey);
+            string expectedMessageCiffer = "6A-DC-53-05-14";
+            Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
+        }
 
         [TestMethod]
         public void getQRCode()
@@ -191,5 +199,4 @@ namespace SFVBoliviaTest
             Bitmap qrCode = helper.GetQRCode(emptyString);
         }
     }
-    
 }

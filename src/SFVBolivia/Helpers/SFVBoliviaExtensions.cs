@@ -14,24 +14,27 @@ namespace SFVBolivia.Helpers
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             //Step 1      
-            string verhoeffDigits;
-            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
-
-            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
-            total.AddVerhoeffDigit(5, out verhoeffDigits);
-
+            string verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+        
             //Step 2 and 3
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
 
             //Step 4
 
+
+            //Step   5
+           
+
             return "";
         }
 
-        //Step1
+        /// <summary>
+        /// This method number of verhoeff digit to an expecific number.
+        /// </summary>
+        /// <param name="number">to concat verhoeff digits</param>
+        /// <param name="digitsNumber">number to add</param>
+        /// <param name="verhoeffDigits">concat generated for number</param>
+        /// <returns>number concat with verhoeff digits</returns>
         public static long AddVerhoeffDigit(this long number, int digitsNumber, out string verhoeffDigits)
         {
             verhoeffDigits = "";
@@ -46,6 +49,32 @@ namespace SFVBolivia.Helpers
             return long.Parse(numberStr);
         }
 
+        /// <summary>
+        ///  THis method implements logic to retrieve last 5 verhoeff digits.
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <param name="nitOrCi">client identification</param>
+        /// <param name="transactionDate"> date YYYYmmdd</param>
+        /// <param name="transactionAmount">bill total</param>
+        /// <returns>last 5 verhoeff digits</returns>
+        public static string AddVerhoeffDigits(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
+        {
+            //Retrieve verhoeff digit per each bill data and concat it.
+            string verhoeffDigits;
+            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
+            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
+
+            // Add bill data
+            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
+            total.AddVerhoeffDigit(5, out verhoeffDigits);
+
+            // Return last five verhoeff digits
+            return verhoeffDigits;
+        }
+
+        //Step 2 and 3
         /// <summary>
         /// This method is to get partial allegedRC4 value.
         /// </summary>
@@ -75,13 +104,29 @@ namespace SFVBolivia.Helpers
         }
 
         //Step 4
-        public static void CalculatePartialSum()
+        public static int[] CalculatePartialSum(string hash)
         {
+            int[] sumsArray = new int[6];
+            byte[] asciiBytes = Encoding.ASCII.GetBytes(hash);
+            Enumerable.Range(0, asciiBytes.Length).ToList().ForEach(n => {
+                sumsArray[0] += asciiBytes[n];
+                sumsArray[n + 1 - 5 * (n / 5)] += asciiBytes[n];
+            });
+            return sumsArray;
         }
 
         //Step 5 and 6
-        public static void GetFinalAllegedRC4()
+        public static string GetFinalAllegedRC4(string verhoeffDigits, int[] partialSumsArray, string dosinKey)
         {
+            List<int> numbers = verhoeffDigits.Select(digit => int.Parse(digit.ToString())).ToList();
+            int spIndex = 0;
+            int totalTruncSum = 0;
+            int totalSum = partialSumsArray.Sum();
+            numbers.ForEach(number => {
+                totalTruncSum += ((totalSum * partialSumsArray[spIndex]) / (number + 1));
+                spIndex++;
+            });
+            return helper.GetRC4Ciphertext(helper.GetBase64(totalTruncSum), $"{dosinKey}{verhoeffDigits}");
         }
 
         public static void FormatCodeControl()
