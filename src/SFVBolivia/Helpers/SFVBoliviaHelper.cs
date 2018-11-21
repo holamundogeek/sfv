@@ -155,26 +155,33 @@ namespace SFVBolivia.Helpers
         /// <returns>literal of a number.</returns>
         public String ConvertToLiteral(int number) {
             StringBuilder result = new StringBuilder();
-            int exponente = CountDigits(number) - 1;
-            Dictionary<int, string> numbers = FillDictionary();
+            Map<Integer, String> numbers = GetSeedNumbers();
 
-            int num, numReal;
+            int partialNumber, exponent;
             while (number > 0) {
-                num = number / ((int) Math.pow(10, exponente));
-                numReal = num * ((int) Math.pow(10, exponente));
-                result.append(numbers.get(numReal)).append(" ");
-
-                if (IsTens(numReal)) {
-                    result.append(" y ");
-                }
-
-                number = number % ((int) Math.pow(10, exponente));
-                exponente --;
-
-                if (number < 20) {
+                exponent = CountDigits(number) - 1;
+                
+                if(numbers.containsKey(number)) {
                     result.append(numbers.get(number));
-                    number = 0;
+                } else {
+                    partialNumber = number / ((int) Math.pow(10, exponent)) * (((int) Math.pow(10, exponent)));
+                    
+                    if (IsMillionUnit(partialNumber)) {
+                        String millionUnit = ConvertToString(number/1000000);
+                        String millionUnitLiteral = (millionUnit.equals("Uno"))? " Millon " : " Millones ";
+                        result.append(millionUnit).append(millionUnitLiteral);
+                        number = number % 1000000;
+                    } else if (IsThousandUnit(partialNumber)) {
+                        result.append(ConvertToString(number/1000)).append(" Mil ");
+                        number = number % 1000;
+                    } else if (IsTens(number)) {
+                        result.append(numbers.get(partialNumber)).append(" y ");
+                    } else {
+                        result.append(numbers.get(partialNumber)).append(" ");
+                    }
                 }
+
+                number = number % ((int) Math.pow(10, exponent));
             }
 
             return result.toString();
@@ -206,55 +213,72 @@ namespace SFVBolivia.Helpers
         }
 
         /// <summary>
+        /// Verify if a number is a thousand unit.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a thousand unit, otherwise false.</returns>
+        private boolean IsThousandUnit(int number)
+        {
+            return (number / 1000) != 0;
+        }
+
+        /// <summary>
+        /// Verify if a number is a million unit.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a million unit, otherwise false.</returns>
+        private boolean IsMillionUnit(int number)
+        {
+            return (number / 1000000) != 0;
+        }
+
+        /// <summary>
         /// Fill a dictionary with specific values.
         /// </summary>
         /// <returns>the dictionary filled.</returns>
-        private Dictionary<int, string> FillDictionary()
-        {
-            Dictionary<int, string> numbers = new Dictionary<int, string>();
-            numbers.add(0, "cero");
-            numbers.add(1, "uno");
-            numbers.add(2, "dos");
-            numbers.add(3, "tres");
-            numbers.add(4, "cuatro");
-            numbers.add(5, "cinco");
-            numbers.add(6, "seis");
-            numbers.add(7, "siete");
-            numbers.add(8, "ocho");
-            numbers.add(9, "nueve");
-            numbers.add(10, "diez");
+        private Map<Integer, String> GetSeedNumbers() {
+            Map<Integer, String> numbers = new HashMap<>();
+            numbers.put(0, "Cero");
+            numbers.put(1, "Uno");
+            numbers.put(2, "Dos");
+            numbers.put(3, "Tres");
+            numbers.put(4, "Cuatro");
+            numbers.put(5, "Cinco");
+            numbers.put(6, "Seis");
+            numbers.put(7, "Siete");
+            numbers.put(8, "Ocho");
+            numbers.put(9, "Nueve");
+            numbers.put(10, "Diez");
 
-            numbers.add(11, "once");
-            numbers.add(12, "doce");
-            numbers.add(13, "trece");
-            numbers.add(14, "catorce");
-            numbers.add(15, "quince");
-            numbers.add(16, "dieciseis");
-            numbers.add(17, "diecisiete");
-            numbers.add(18, "dieciocho");
-            numbers.add(19, "diecinueve");
+            numbers.put(11, "Once");
+            numbers.put(12, "Doce");
+            numbers.put(13, "Trece");
+            numbers.put(14, "Catorce");
+            numbers.put(15, "Quince");
+            numbers.put(16, "Dieciseis");
+            numbers.put(17, "Diecisiete");
+            numbers.put(18, "Dieciocho");
+            numbers.put(19, "Diecinueve");
 
-            numbers.add(20, "veinte");
-            numbers.add(30, "treinta");
-            numbers.add(40, "cuarenta");
-            numbers.add(50, "cincuenta");
-            numbers.add(60, "sesenta");
-            numbers.add(70, "setenta");
-            numbers.add(80, "ochenta");
-            numbers.add(90, "noventa");
+            numbers.put(20, "Veinte");
+            numbers.put(30, "Treinta");
+            numbers.put(40, "Cuarenta");
+            numbers.put(50, "Cincuenta");
+            numbers.put(60, "Sesenta");
+            numbers.put(70, "Setenta");
+            numbers.put(80, "Ochenta");
+            numbers.put(90, "Noventa");
 
-            numbers.add(100, "cien");
-            numbers.add(200, "doscientos");
-            numbers.add(300, "trescientos");
-            numbers.add(400, "cuatrocientos");
-            numbers.add(500, "quinientos");
-            numbers.add(600, "seiscientos");
-            numbers.add(700, "setecientos");
-            numbers.add(800, "ochocientos");
-            numbers.add(900, "novecientos");
-
-            numbers.add(1000, "mil");
-
+            numbers.put(100, "Cien");
+            numbers.put(200, "Doscientos");
+            numbers.put(300, "Trescientos");
+            numbers.put(400, "Cuatrocientos");
+            numbers.put(500, "Quinientos");
+            numbers.put(600, "Seiscientos");
+            numbers.put(700, "Setecientos");
+            numbers.put(800, "Ochocientos");
+            numbers.put(900, "Novecientos");
+            
             return numbers;
         }
     }
