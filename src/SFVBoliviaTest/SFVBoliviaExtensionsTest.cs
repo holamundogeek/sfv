@@ -69,5 +69,21 @@ namespace SFVBoliviaTest
             int[] expectedPartialSums = { 7720, 1548, 1537, 1540, 1565, 1530 };
             CollectionAssert.AreEqual(expectedPartialSums, partialSums);
         }
+
+        [TestMethod]
+        public void TestGetControlCode()
+        {
+            long authorizationNumber = 79040011859;
+            long invoiceNumber = 152;
+            long nitOrCi = 1026469026;
+            long transactionDate = 20070728;
+            double transactionAmount = 135;
+            string dosingKey = "A3Fs4s$)2cvD(eY667A5C4A2rsdf53kw9654E2B23s24df35F5";
+
+            string expectedResult = SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+            string actualResult = "FB-A6-E4-78";
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
     }
 }
