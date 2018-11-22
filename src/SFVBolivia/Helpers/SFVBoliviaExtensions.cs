@@ -15,17 +15,21 @@ namespace SFVBolivia.Helpers
         {
             //Step 1      
             string verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            Console.WriteLine("Step1: ", verhoeffDigits);
         
             //Step 2 and 3
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+            Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
             //Step 4
+            int[] sumOfAsciiValues = CalculatePartialSum(partialAllegedRC4);
+            Console.WriteLine("Step4: ", sumOfAsciiValues);
 
+            //Step 5 and 6
+            string controlCode = GetFinalAllegedRC4(verhoeffDigits, sumOfAsciiValues, dosingKey);
+            Console.WriteLine("Step5 and 6: ", controlCode);
 
-            //Step   5
-           
-
-            return "";
+            return controlCode;
         }
 
         /// <summary>
