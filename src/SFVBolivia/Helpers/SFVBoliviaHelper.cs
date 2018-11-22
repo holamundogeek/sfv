@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SFVBolivia.Helpers
@@ -153,38 +154,38 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to converts.</param>
         /// <returns>literal of a number.</returns>
-        public String ConvertToLiteral(int number) {
+        public string ConvertToLiteral(int number) {
             StringBuilder result = new StringBuilder();
-            Map<Integer, String> numbers = GetSeedNumbers();
+            Dictionary<int, string> seedNumbers = GetSeedNumbers();
 
             int partialNumber, exponent;
             while (number > 0) {
                 exponent = CountDigits(number) - 1;
                 
-                if(numbers.containsKey(number)) {
-                    result.append(numbers.get(number));
+                if(seedNumbers.ContainsKey(number)) {
+                    result.Append(seedNumbers[number]);
                 } else {
-                    partialNumber = number / ((int) Math.pow(10, exponent)) * (((int) Math.pow(10, exponent)));
+                    partialNumber = number / ((int) System.Math.Pow(10, exponent)) * ((int) System.Math.Pow(10, exponent));
                     
                     if (IsMillionUnit(partialNumber)) {
-                        String millionUnit = ConvertToString(number/1000000);
-                        String millionUnitLiteral = (millionUnit.equals("Uno"))? " Millon " : " Millones ";
-                        result.append(millionUnit).append(millionUnitLiteral);
+                        string millionUnit = ConvertToLiteral(number/1000000);
+                        string millionUnitLiteral = (millionUnit.Equals("Uno"))? " Millon " : " Millones ";
+                        result.Append(millionUnit).Append(millionUnitLiteral);
                         number = number % 1000000;
                     } else if (IsThousandUnit(partialNumber)) {
-                        result.append(ConvertToString(number/1000)).append(" Mil ");
+                        result.Append(ConvertToLiteral(number/1000)).Append(" Mil ");
                         number = number % 1000;
                     } else if (IsTens(number)) {
-                        result.append(numbers.get(partialNumber)).append(" y ");
+                        result.Append(seedNumbers[partialNumber]).Append(" y ");
                     } else {
-                        result.append(numbers.get(partialNumber)).append(" ");
+                        result.Append(seedNumbers[(partialNumber)]).Append(" ");
                     }
                 }
 
-                number = number % ((int) Math.pow(10, exponent));
+                number = number % ((int) System.Math.Pow(10, exponent));
             }
 
-            return result.toString();
+            return result.ToString();
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a tens, otherwise false.</returns>
-        private boolean IsTens(int number)
+        private bool IsTens(int number)
         {
             return (number / 10 < 10) && (number / 10) != 0;
         }
@@ -217,7 +218,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a thousand unit, otherwise false.</returns>
-        private boolean IsThousandUnit(int number)
+        private bool IsThousandUnit(int number)
         {
             return (number / 1000) != 0;
         }
@@ -227,7 +228,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a million unit, otherwise false.</returns>
-        private boolean IsMillionUnit(int number)
+        private bool IsMillionUnit(int number)
         {
             return (number / 1000000) != 0;
         }
@@ -236,49 +237,49 @@ namespace SFVBolivia.Helpers
         /// Fill a dictionary with specific values.
         /// </summary>
         /// <returns>the dictionary filled.</returns>
-        private Map<Integer, String> GetSeedNumbers() {
-            Map<Integer, String> numbers = new HashMap<>();
-            numbers.put(0, "Cero");
-            numbers.put(1, "Uno");
-            numbers.put(2, "Dos");
-            numbers.put(3, "Tres");
-            numbers.put(4, "Cuatro");
-            numbers.put(5, "Cinco");
-            numbers.put(6, "Seis");
-            numbers.put(7, "Siete");
-            numbers.put(8, "Ocho");
-            numbers.put(9, "Nueve");
-            numbers.put(10, "Diez");
+        private Dictionary<int, string> GetSeedNumbers() {
+            Dictionary<int, string> numbers = new Dictionary<int, string>();
+            numbers.Add(0, "Cero");
+            numbers.Add(1, "Uno");
+            numbers.Add(2, "Dos");
+            numbers.Add(3, "Tres");
+            numbers.Add(4, "Cuatro");
+            numbers.Add(5, "Cinco");
+            numbers.Add(6, "Seis");
+            numbers.Add(7, "Siete");
+            numbers.Add(8, "Ocho");
+            numbers.Add(9, "Nueve");
+            numbers.Add(10, "Diez");
 
-            numbers.put(11, "Once");
-            numbers.put(12, "Doce");
-            numbers.put(13, "Trece");
-            numbers.put(14, "Catorce");
-            numbers.put(15, "Quince");
-            numbers.put(16, "Dieciseis");
-            numbers.put(17, "Diecisiete");
-            numbers.put(18, "Dieciocho");
-            numbers.put(19, "Diecinueve");
+            numbers.Add(11, "Once");
+            numbers.Add(12, "Doce");
+            numbers.Add(13, "Trece");
+            numbers.Add(14, "Catorce");
+            numbers.Add(15, "Quince");
+            numbers.Add(16, "Dieciseis");
+            numbers.Add(17, "Diecisiete");
+            numbers.Add(18, "Dieciocho");
+            numbers.Add(19, "Diecinueve");
 
-            numbers.put(20, "Veinte");
-            numbers.put(30, "Treinta");
-            numbers.put(40, "Cuarenta");
-            numbers.put(50, "Cincuenta");
-            numbers.put(60, "Sesenta");
-            numbers.put(70, "Setenta");
-            numbers.put(80, "Ochenta");
-            numbers.put(90, "Noventa");
+            numbers.Add(20, "Veinte");
+            numbers.Add(30, "Treinta");
+            numbers.Add(40, "Cuarenta");
+            numbers.Add(50, "Cincuenta");
+            numbers.Add(60, "Sesenta");
+            numbers.Add(70, "Setenta");
+            numbers.Add(80, "Ochenta");
+            numbers.Add(90, "Noventa");
 
-            numbers.put(100, "Cien");
-            numbers.put(200, "Doscientos");
-            numbers.put(300, "Trescientos");
-            numbers.put(400, "Cuatrocientos");
-            numbers.put(500, "Quinientos");
-            numbers.put(600, "Seiscientos");
-            numbers.put(700, "Setecientos");
-            numbers.put(800, "Ochocientos");
-            numbers.put(900, "Novecientos");
-            
+            numbers.Add(100, "Cien");
+            numbers.Add(200, "Doscientos");
+            numbers.Add(300, "Trescientos");
+            numbers.Add(400, "Cuatrocientos");
+            numbers.Add(500, "Quinientos");
+            numbers.Add(600, "Seiscientos");
+            numbers.Add(700, "Setecientos");
+            numbers.Add(800, "Ochocientos");
+            numbers.Add(900, "Novecientos");
+           
             return numbers;
         }
     }
