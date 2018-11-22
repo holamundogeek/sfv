@@ -17,7 +17,7 @@ namespace SFVBolivia.Helpers
             string verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
             Console.WriteLine("Step1: ", verhoeffDigits);
         
-            //Step 2 and 3
+            //Step 2 and 3 (Review)
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
             Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
