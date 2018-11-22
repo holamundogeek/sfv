@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFVBolivia
 {
-    public static class SFVBolivia
+    public static class SFV
     {
         public static void GetCodeControl()
         {
