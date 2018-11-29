@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFVBolivia.Helpers
 {
-    class Reader
+    public class Reader
     {
         /// <summary>
         /// Method that allows read a specific file
@@ -16,6 +16,10 @@ namespace SFVBolivia.Helpers
         /// <returns>An array with information, otherwise null</returns>
         public string[] ReadFile(String path)
         {
+            // string app = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+            // string filePath = Path.Combine(app, @"testCases.txt");
+            // Reader reader = new Reader();
+            // reader.ReadFile(filePath);
             string[] lines = null;
 
             try

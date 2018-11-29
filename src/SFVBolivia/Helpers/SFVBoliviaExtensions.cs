@@ -14,11 +14,12 @@ namespace SFVBolivia.Helpers
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             //Step 1      
-            string verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            Dictionary<string, long> verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
             Console.WriteLine("Step1: ", verhoeffDigits);
-        
+
             //Step 2 and 3 (Review)
-            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString(), authorizationNumber, verhoeffDigits["newInvoiceNumber"],
+                verhoeffDigits["newNitOrCi"], verhoeffDigits["newTransactionDate"], verhoeffDigits["newTransactionAmount"], dosingKey);
             Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
             //Step 4
@@ -26,7 +27,8 @@ namespace SFVBolivia.Helpers
             Console.WriteLine("Step4: ", sumOfAsciiValues);
 
             //Step 5 and 6
-            string controlCode = GetFinalAllegedRC4(verhoeffDigits, sumOfAsciiValues, dosingKey);
+            int[] asciiValues = { sumOfAsciiValues[1], sumOfAsciiValues[2], sumOfAsciiValues[3], sumOfAsciiValues[4], sumOfAsciiValues[5] };
+            string controlCode = GetFinalAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString(), asciiValues, dosingKey);
             Console.WriteLine("Step5 and 6: ", controlCode);
 
             return controlCode;
@@ -61,21 +63,29 @@ namespace SFVBolivia.Helpers
         /// <param name="transactionDate"> date YYYYmmdd</param>
         /// <param name="transactionAmount">bill total</param>
         /// <returns>last 5 verhoeff digits</returns>
-        public static string AddVerhoeffDigits(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
+        public static Dictionary<string, long> AddVerhoeffDigits(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
         {
             //Retrieve verhoeff digit per each bill data and concat it.
             string verhoeffDigits;
-            var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
-            var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
+            Dictionary<string, long> modifiedParameters = new Dictionary<string, long>();
+            //var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
+            modifiedParameters.Add("newInvoiceNumber", invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits));
+            //var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
+            modifiedParameters.Add("newNitOrCi", nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits));
+            //var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
+            modifiedParameters.Add("newTransactionDate", transactionDate.AddVerhoeffDigit(2, out verhoeffDigits));
+            //var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
+            modifiedParameters.Add("newTransactionAmount", Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits));
 
             // Add bill data
-            long total = newInvoiceNumber + newNitOrCi + newTransactionDate + newTransactionAmount;
+            long total = modifiedParameters ["newInvoiceNumber"] + modifiedParameters ["newNitOrCi"] + modifiedParameters ["newTransactionDate"] 
+                + modifiedParameters ["newTransactionAmount"];
+
             total.AddVerhoeffDigit(5, out verhoeffDigits);
+            modifiedParameters["verhoeffDigits"] = long.Parse(verhoeffDigits);
 
             // Return last five verhoeff digits
-            return verhoeffDigits;
+            return modifiedParameters;
         }
 
         //Step 2 and 3
