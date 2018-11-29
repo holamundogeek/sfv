@@ -80,8 +80,8 @@ namespace SFVBoliviaTest
             double transactionAmount = 135;
             string dosingKey = "A3Fs4s$)2cvD(eY667A5C4A2rsdf53kw9654E2B23s24df35F5";
 
-            string expectedResult = SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
-            string actualResult = "FB-A6-E4-78";
+            string actualResult = SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+            string expectedResult = "FB-A6-E4-78";
 
             Assert.AreEqual(expectedResult, actualResult);
         }
