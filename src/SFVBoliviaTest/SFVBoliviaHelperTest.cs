@@ -1,6 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SFVBolivia.Helpers;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace SFVBoliviaTest
 {
@@ -8,7 +10,7 @@ namespace SFVBoliviaTest
     public class SFVBoliviaHelperTest
     {
         private SFVBoliviaHelper helper = new SFVBoliviaHelper();
-       
+
         [TestMethod]
         public void GetVerhoeffCheckDigitCaseOneValueTest()
         {
@@ -153,7 +155,7 @@ namespace SFVBoliviaTest
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
 
-        [TestMethod]
+       [TestMethod]
         public void GetFinalAllegedRC4Test()
         {
             int[] partialSumsArray = new int[] { 1548, 1537, 1540, 1565, 1530 };
@@ -162,6 +164,39 @@ namespace SFVBoliviaTest
             string actualMessageCiffer = SFVBoliviaExtensions.GetFinalAllegedRC4(verhoeffDigits, partialSumsArray, dosingKey);
             string expectedMessageCiffer = "6A-DC-53-05-14";
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
+        }
+
+        [TestMethod]
+        public void getQRCode()
+        {
+            // Given
+            int billNumber = 10;
+            long authorization = 132002430;
+            DateTime date = DateTime.Now.Date;
+            double amount = 30.00;
+            double amountFiscalCredit = 27.00;
+            string controlCode = "A6-22-1D-EF-11";
+            long nITRecep = 3763395;
+            UserIssuer userIssuer = new UserIssuer("Graciela Loayza", 352687016, "Av. Siles 2018");
+            Bill bill = new Bill(billNumber, authorization, date, amount, amountFiscalCredit,
+            controlCode, nITRecep, userIssuer);
+           
+            // When
+            Bitmap qrCode = helper.GetQRCode(bill.ToString());
+
+            // Then
+            Assert.IsInstanceOfType(qrCode, typeof(Bitmap));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "A qRString of null was inappropriately allowed.")]
+        public void illegalArgumentException()
+        {
+            // When
+            string emptyString = null;
+
+            // Then
+            Bitmap qrCode = helper.GetQRCode(emptyString);
         }
     }
 }
