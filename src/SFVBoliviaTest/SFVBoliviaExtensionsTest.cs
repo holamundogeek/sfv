@@ -113,8 +113,6 @@ namespace SFVBoliviaTest
             //string dosingKey = "A3Fs4s$)2cvD(eY667A5C4A2rsdf53kw9654E2B23s24df35F5";
             string dosingKey = TestContext.DataRow["DosingKey"].ToString();
 
-            string env = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-
             string actualResult = SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
             string expectedResult = TestContext.DataRow["ControlCode"].ToString();
 
