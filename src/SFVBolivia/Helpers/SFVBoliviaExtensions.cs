@@ -18,7 +18,7 @@ namespace SFVBolivia.Helpers
             Console.WriteLine("Step1: ", verhoeffDigits);
 
             //Step 2 and 3 (Review)
-            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString(), authorizationNumber, verhoeffDigits["newInvoiceNumber"],
+            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString().PadLeft(5, '0'), authorizationNumber, verhoeffDigits["newInvoiceNumber"],
                 verhoeffDigits["newNitOrCi"], verhoeffDigits["newTransactionDate"], verhoeffDigits["newTransactionAmount"], dosingKey);
             Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
@@ -28,7 +28,7 @@ namespace SFVBolivia.Helpers
 
             //Step 5 and 6
             int[] asciiValues = { sumOfAsciiValues[1], sumOfAsciiValues[2], sumOfAsciiValues[3], sumOfAsciiValues[4], sumOfAsciiValues[5] };
-            string controlCode = GetFinalAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString(), asciiValues, dosingKey);
+            string controlCode = GetFinalAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString().PadLeft(5, '0'), asciiValues, dosingKey);
             Console.WriteLine("Step5 and 6: ", controlCode);
 
             return controlCode;
@@ -75,11 +75,11 @@ namespace SFVBolivia.Helpers
             //var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
             modifiedParameters.Add("newTransactionDate", transactionDate.AddVerhoeffDigit(2, out verhoeffDigits));
             //var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
-            modifiedParameters.Add("newTransactionAmount", Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits));
+            modifiedParameters.Add("newTransactionAmount", Convert.ToInt64(Math.Round(transactionAmount, MidpointRounding.AwayFromZero)).AddVerhoeffDigit(2, out verhoeffDigits));
 
             // Add bill data
-            long total = modifiedParameters ["newInvoiceNumber"] + modifiedParameters ["newNitOrCi"] + modifiedParameters ["newTransactionDate"] 
-                + modifiedParameters ["newTransactionAmount"];
+            long total = modifiedParameters["newInvoiceNumber"] + modifiedParameters["newNitOrCi"] + modifiedParameters["newTransactionDate"]
+                + modifiedParameters["newTransactionAmount"];
 
             total.AddVerhoeffDigit(5, out verhoeffDigits);
             modifiedParameters["verhoeffDigits"] = long.Parse(verhoeffDigits);
@@ -104,14 +104,16 @@ namespace SFVBolivia.Helpers
         {
             List<string> splitDosingKey = new List<string>();
             string auxDosingKey = dosingKey;
-            verhoeffDigits.ToList().ForEach(n => {
+            verhoeffDigits.ToList().ForEach(n =>
+            {
                 int verhoeffDigit = int.Parse(n.ToString());
-                verhoeffDigit = verhoeffDigit == 9 ? 0 : verhoeffDigit + 1;
+                verhoeffDigit++;
                 splitDosingKey.Add(auxDosingKey.Substring(0, verhoeffDigit));
                 auxDosingKey = auxDosingKey.Substring(verhoeffDigit);
             });
+            string nitOrCiFormatted = nitOrCi.ToString().Length == 2 ? nitOrCi.ToString().PadLeft(3, '0') : nitOrCi.ToString();
             string concat = $"{authorizationNumber}{splitDosingKey.ElementAt(0)}{invoiceNumber}{splitDosingKey.ElementAt(1)}" +
-                            $"{nitOrCi}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
+                            $"{nitOrCiFormatted}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
                             $"{transactionAmount}{splitDosingKey.ElementAt(4)}";
             string newDosingKey = $"{dosingKey}{verhoeffDigits}";
             return helper.GetRC4Ciphertext(concat, newDosingKey).Replace("-", string.Empty);
@@ -122,7 +124,8 @@ namespace SFVBolivia.Helpers
         {
             int[] sumsArray = new int[6];
             byte[] asciiBytes = Encoding.ASCII.GetBytes(hash);
-            Enumerable.Range(0, asciiBytes.Length).ToList().ForEach(n => {
+            Enumerable.Range(0, asciiBytes.Length).ToList().ForEach(n =>
+            {
                 sumsArray[0] += asciiBytes[n];
                 sumsArray[n + 1 - 5 * (n / 5)] += asciiBytes[n];
             });
@@ -136,7 +139,8 @@ namespace SFVBolivia.Helpers
             int spIndex = 0;
             int totalTruncSum = 0;
             int totalSum = partialSumsArray.Sum();
-            numbers.ForEach(number => {
+            numbers.ForEach(number =>
+            {
                 totalTruncSum += ((totalSum * partialSumsArray[spIndex]) / (number + 1));
                 spIndex++;
             });

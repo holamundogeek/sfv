@@ -8,7 +8,7 @@ namespace SFVBoliviaTest
     public class SFVBoliviaHelperTest
     {
         private SFVBoliviaHelper helper = new SFVBoliviaHelper();
-       
+
         [TestMethod]
         public void GetVerhoeffCheckDigitCaseOneValueTest()
         {
