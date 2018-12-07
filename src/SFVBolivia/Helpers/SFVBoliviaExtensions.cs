@@ -13,13 +13,14 @@ namespace SFVBolivia.Helpers
         //TODO Complete this implementation
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
-            //Step 1      
-            Dictionary<string, long> verhoeffDigits = AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            //Step 1
+            string nitOrCiFormatted;
+            string verhoeffDigits = GetVerhoeffDigits(ref invoiceNumber, ref nitOrCi, ref transactionDate, ref transactionAmount, out nitOrCiFormatted);
             Console.WriteLine("Step1: ", verhoeffDigits);
+            verhoeffDigits = verhoeffDigits.PadLeft(5, '0');
 
             //Step 2 and 3 (Review)
-            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString().PadLeft(5, '0'), authorizationNumber, verhoeffDigits["newInvoiceNumber"],
-                verhoeffDigits["newNitOrCi"], verhoeffDigits["newTransactionDate"], verhoeffDigits["newTransactionAmount"], dosingKey);
+            string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCiFormatted, transactionDate, transactionAmount, dosingKey);
             Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
             //Step 4
@@ -28,7 +29,7 @@ namespace SFVBolivia.Helpers
 
             //Step 5 and 6
             int[] asciiValues = { sumOfAsciiValues[1], sumOfAsciiValues[2], sumOfAsciiValues[3], sumOfAsciiValues[4], sumOfAsciiValues[5] };
-            string controlCode = GetFinalAllegedRC4(verhoeffDigits["verhoeffDigits"].ToString().PadLeft(5, '0'), asciiValues, dosingKey);
+            string controlCode = GetFinalAllegedRC4(verhoeffDigits, asciiValues, dosingKey);
             Console.WriteLine("Step5 and 6: ", controlCode);
 
             return controlCode;
@@ -63,29 +64,28 @@ namespace SFVBolivia.Helpers
         /// <param name="transactionDate"> date YYYYmmdd</param>
         /// <param name="transactionAmount">bill total</param>
         /// <returns>last 5 verhoeff digits</returns>
-        public static Dictionary<string, long> AddVerhoeffDigits(long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount)
+        public static string GetVerhoeffDigits(ref long invoiceNumber, ref long nitOrCi, ref long transactionDate, ref double transactionAmount, out string nitOrCiFormatted)
         {
+            bool isNitOrCiZero = nitOrCi == 0;
             //Retrieve verhoeff digit per each bill data and concat it.
             string verhoeffDigits;
-            Dictionary<string, long> modifiedParameters = new Dictionary<string, long>();
-            //var newInvoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
-            modifiedParameters.Add("newInvoiceNumber", invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits));
-            //var newNitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
-            modifiedParameters.Add("newNitOrCi", nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits));
-            //var newTransactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
-            modifiedParameters.Add("newTransactionDate", transactionDate.AddVerhoeffDigit(2, out verhoeffDigits));
-            //var newTransactionAmount = Convert.ToInt64(Math.Round(transactionAmount)).AddVerhoeffDigit(2, out verhoeffDigits);
-            modifiedParameters.Add("newTransactionAmount", Convert.ToInt64(Math.Round(transactionAmount, MidpointRounding.AwayFromZero)).AddVerhoeffDigit(2, out verhoeffDigits));
+            invoiceNumber = invoiceNumber.AddVerhoeffDigit(2, out verhoeffDigits);
+            nitOrCi = nitOrCi.AddVerhoeffDigit(2, out verhoeffDigits);
+            transactionDate = transactionDate.AddVerhoeffDigit(2, out verhoeffDigits);
+            transactionAmount = Convert.ToInt64(Math.Round(transactionAmount, MidpointRounding.AwayFromZero)).AddVerhoeffDigit(2, out verhoeffDigits);
 
             // Add bill data
-            long total = modifiedParameters["newInvoiceNumber"] + modifiedParameters["newNitOrCi"] + modifiedParameters["newTransactionDate"]
-                + modifiedParameters["newTransactionAmount"];
-
+            long total = invoiceNumber + nitOrCi + transactionDate + (long)transactionAmount;
             total.AddVerhoeffDigit(5, out verhoeffDigits);
-            modifiedParameters["verhoeffDigits"] = long.Parse(verhoeffDigits);
+
+            nitOrCiFormatted = nitOrCi.ToString();
+            if (isNitOrCiZero)
+            {
+                nitOrCiFormatted = nitOrCiFormatted.PadLeft(3, '0');
+            }
 
             // Return last five verhoeff digits
-            return modifiedParameters;
+            return verhoeffDigits;
         }
 
         //Step 2 and 3
@@ -100,7 +100,7 @@ namespace SFVBolivia.Helpers
         /// <param name="transactionAmount">the transaction amount with verhoeff digits.</param>
         /// <param name="dosingKey">the dosing key.</param>
         /// <returns>A partial alleged RC4 value</returns>
-        public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
+        public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, string nitOrCiFormatted, long transactionDate, double transactionAmount, string dosingKey)
         {
             List<string> splitDosingKey = new List<string>();
             string auxDosingKey = dosingKey;
@@ -111,7 +111,7 @@ namespace SFVBolivia.Helpers
                 splitDosingKey.Add(auxDosingKey.Substring(0, verhoeffDigit));
                 auxDosingKey = auxDosingKey.Substring(verhoeffDigit);
             });
-            string nitOrCiFormatted = nitOrCi.ToString().Length == 2 ? nitOrCi.ToString().PadLeft(3, '0') : nitOrCi.ToString();
+
             string concat = $"{authorizationNumber}{splitDosingKey.ElementAt(0)}{invoiceNumber}{splitDosingKey.ElementAt(1)}" +
                             $"{nitOrCiFormatted}{splitDosingKey.ElementAt(2)}{transactionDate}{splitDosingKey.ElementAt(3)}" +
                             $"{transactionAmount}{splitDosingKey.ElementAt(4)}";

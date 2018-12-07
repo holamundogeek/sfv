@@ -20,10 +20,11 @@ namespace SFVBoliviaTest
             int expectedLenght = 5;
 
             // When
-            Dictionary<string, long> verhoeffDigits = SFVBoliviaExtensions.AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            string nitOrCiFormatted;
+            string verhoeffDigits = SFVBoliviaExtensions.GetVerhoeffDigits(ref invoiceNumber, ref nitOrCi, ref transactionDate, ref transactionAmount, out nitOrCiFormatted);
 
             // Then
-            Assert.AreEqual(expectedLenght, verhoeffDigits["verhoeffDigits"].ToString().Length);
+            Assert.AreEqual(expectedLenght, verhoeffDigits.Length);
         }
 
         [TestMethod]
@@ -37,10 +38,11 @@ namespace SFVBoliviaTest
             string expectedNumber = "71621";
 
             // When
-            Dictionary<string, long> verhoeffDigits = SFVBoliviaExtensions.AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            string nitOrCiFormatted;
+            string verhoeffDigits = SFVBoliviaExtensions.GetVerhoeffDigits(ref invoiceNumber, ref nitOrCi, ref transactionDate, ref transactionAmount, out nitOrCiFormatted);
 
             // Then
-            Assert.AreEqual(expectedNumber, verhoeffDigits["verhoeffDigits"].ToString());
+            Assert.AreEqual(expectedNumber, verhoeffDigits);
         }
     }
 }

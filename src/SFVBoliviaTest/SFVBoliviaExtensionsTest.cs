@@ -37,7 +37,7 @@ namespace SFVBoliviaTest
             string verhoeffDigits = "71621";
             long authorizationNumber = 29040011007;
             long invoiceNumber = 150312;
-            long nitOrCi = 418917901158;
+            string nitOrCi = "418917901158";
             long transactionDate = 2007070201;
             double transactionAmount = 250031;
             string dosingKey = "9rCB7Sv4X29d)5k7N%3ab89p-3(5[A";
