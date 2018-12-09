@@ -1,17 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("SFVBoliviaTest")]
 namespace SFVBolivia.Helpers
 {
-    public static class SFVBoliviaExtensions
+    internal static class SFVBoliviaExtensions
     {
         private static SFVBoliviaHelper helper = new SFVBoliviaHelper();
 
-        //TODO Complete this implementation
-        public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
+        /// <summary>
+        /// Gets control code according to parameters.
+        /// </summary>
+        /// <param name="authorizationNumber">Authorization number.</param>
+        /// <param name="invoiceNumber">Invoice number.</param>
+        /// <param name="nitOrCi">NIT or CI.</param>
+        /// <param name="transactionDate">Transaction date.</param>
+        /// <param name="transactionAmount">Transaction amount.</param>
+        /// <param name="dosingKey">Dosing Key.</param>
+        /// <returns></returns>
+        internal static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
             //Step 1
             string nitOrCiFormatted;
@@ -19,7 +30,7 @@ namespace SFVBolivia.Helpers
             Console.WriteLine("Step1: ", verhoeffDigits);
             verhoeffDigits = verhoeffDigits.PadLeft(5, '0');
 
-            //Step 2 and 3 (Review)
+            //Step 2 and 3
             string partialAllegedRC4 = GetPartialAllegedRC4(verhoeffDigits, authorizationNumber, invoiceNumber, nitOrCiFormatted, transactionDate, transactionAmount, dosingKey);
             Console.WriteLine("Step2 and 3: ", partialAllegedRC4);
 
@@ -36,13 +47,13 @@ namespace SFVBolivia.Helpers
         }
 
         /// <summary>
-        /// This method number of verhoeff digit to an expecific number.
+        /// Adds verhoeff digit to an expecific number.
         /// </summary>
-        /// <param name="number">to concat verhoeff digits</param>
-        /// <param name="digitsNumber">number to add</param>
-        /// <param name="verhoeffDigits">concat generated for number</param>
-        /// <returns>number concat with verhoeff digits</returns>
-        public static long AddVerhoeffDigit(this long number, int digitsNumber, out string verhoeffDigits)
+        /// <param name="number">To concat verhoeff digits.</param>
+        /// <param name="digitsNumber">Number to add.</param>
+        /// <param name="verhoeffDigits">Concat generated for number.</param>
+        /// <returns>Number concat with verhoeff digits.</returns>
+        internal static long AddVerhoeffDigit(this long number, int digitsNumber, out string verhoeffDigits)
         {
             verhoeffDigits = "";
             string numberStr = number.ToString();
@@ -57,14 +68,14 @@ namespace SFVBolivia.Helpers
         }
 
         /// <summary>
-        ///  THis method implements logic to retrieve last 5 verhoeff digits.
+        ///  Retrieves last 5 verhoeff digits.
         /// </summary>
         /// <param name="invoiceNumber"></param>
-        /// <param name="nitOrCi">client identification</param>
-        /// <param name="transactionDate"> date YYYYmmdd</param>
-        /// <param name="transactionAmount">bill total</param>
-        /// <returns>last 5 verhoeff digits</returns>
-        public static string GetVerhoeffDigits(ref long invoiceNumber, ref long nitOrCi, ref long transactionDate, ref double transactionAmount, out string nitOrCiFormatted)
+        /// <param name="nitOrCi">Client identification.</param>
+        /// <param name="transactionDate">Date YYYYmmdd.</param>
+        /// <param name="transactionAmount">Bill total.</param>
+        /// <returns>Last 5 verhoeff digits.</returns>
+        internal static string GetVerhoeffDigits(ref long invoiceNumber, ref long nitOrCi, ref long transactionDate, ref double transactionAmount, out string nitOrCiFormatted)
         {
             bool isNitOrCiZero = nitOrCi == 0;
             //Retrieve verhoeff digit per each bill data and concat it.
@@ -88,19 +99,18 @@ namespace SFVBolivia.Helpers
             return verhoeffDigits;
         }
 
-        //Step 2 and 3
         /// <summary>
-        /// This method is to get partial allegedRC4 value.
+        /// Gets partial allegedRC4 value.
         /// </summary>
-        /// <param name="verhoeffDigits">the verhoeff digit generated previously</param>
+        /// <param name="verhoeffDigits">the verhoeff digit generated previously.</param>
         /// <param name="authorizationNumber">number of authorization with verhoeff digits.</param>
         /// <param name="invoiceNumber">number of invoice with verhoeff digits.</param>
         /// <param name="nitOrCi">number of NIT or CI with verhoeff digits.</param>
         /// <param name="transactionDate">the transaction date with verhoeff digits.</param>
         /// <param name="transactionAmount">the transaction amount with verhoeff digits.</param>
         /// <param name="dosingKey">the dosing key.</param>
-        /// <returns>A partial alleged RC4 value</returns>
-        public static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, string nitOrCiFormatted, long transactionDate, double transactionAmount, string dosingKey)
+        /// <returns>A partial alleged RC4 value.</returns>
+        internal static string GetPartialAllegedRC4(string verhoeffDigits, long authorizationNumber, long invoiceNumber, string nitOrCiFormatted, long transactionDate, double transactionAmount, string dosingKey)
         {
             List<string> splitDosingKey = new List<string>();
             string auxDosingKey = dosingKey;
@@ -119,8 +129,12 @@ namespace SFVBolivia.Helpers
             return helper.GetRC4Ciphertext(concat, newDosingKey).Replace("-", string.Empty);
         }
 
-        //Step 4
-        public static int[] CalculatePartialSum(string hash)
+        /// <summary>
+        /// Calculates partial sums of ASCII values.
+        /// </summary>
+        /// <param name="hash">Base64 encoded hash.</param>
+        /// <returns>Array of integers that contains the partial sums.</returns>
+        internal static int[] CalculatePartialSum(string hash)
         {
             int[] sumsArray = new int[6];
             byte[] asciiBytes = Encoding.ASCII.GetBytes(hash);
@@ -132,8 +146,14 @@ namespace SFVBolivia.Helpers
             return sumsArray;
         }
 
-        //Step 5 and 6
-        public static string GetFinalAllegedRC4(string verhoeffDigits, int[] partialSumsArray, string dosinKey)
+        /// <summary>
+        /// Gets the final Alleged RC4 encoded string according to parameters.
+        /// </summary>
+        /// <param name="verhoeffDigits">Verhoeff digits.</param>
+        /// <param name="partialSumsArray">Partials sums.</param>
+        /// <param name="dosinKey">Dosing key.</param>
+        /// <returns>Alleged RC4 encoded string.</returns>
+        internal static string GetFinalAllegedRC4(string verhoeffDigits, int[] partialSumsArray, string dosinKey)
         {
             List<int> numbers = verhoeffDigits.Select(digit => int.Parse(digit.ToString())).ToList();
             int spIndex = 0;
@@ -145,10 +165,6 @@ namespace SFVBolivia.Helpers
                 spIndex++;
             });
             return helper.GetRC4Ciphertext(helper.GetBase64(totalTruncSum), $"{dosinKey}{verhoeffDigits}");
-        }
-
-        public static void FormatCodeControl()
-        {
         }
     }
 }
