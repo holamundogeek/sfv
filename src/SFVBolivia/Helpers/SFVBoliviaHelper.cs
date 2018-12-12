@@ -37,8 +37,6 @@ namespace SFVBolivia.Helpers
                                         'y', 'z', '+', '/'};
 
         private int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
-
-<<<<<<< HEAD
         private Dictionary<int, string> seedNumbers = new Dictionary<int, string>
         {
             {0, "Cero"},
@@ -92,8 +90,6 @@ namespace SFVBolivia.Helpers
         public void GetQRCode()
         {
         }
-=======
->>>>>>> develop
 
         public void GetText()
         {
