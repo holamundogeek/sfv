@@ -36,6 +36,56 @@ namespace SFVBolivia.Helpers
 
         private int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
 
+        private Dictionary<int, string> seedNumbers = new Dictionary<int, string>
+        {
+            {0, "Cero"},
+            {1, "Uno"},
+            {2, "Dos"},
+            {3, "Tres"},
+            {4, "Cuatro"},
+            {5, "Cinco"},
+            {6, "Seis"},
+            {7, "Siete"},
+            {8, "Ocho"},
+            {9, "Nueve"},
+            {10, "Diez"},
+            {11, "Once"},
+            {12, "Doce"},
+            {13, "Trece"},
+            {14, "Catorce"},
+            {15, "Quince"},
+            {16, "Dieciseis"},
+            {17, "Diecisiete"},
+            {18, "Dieciocho"},
+            {19, "Diecinueve"},
+            {20, "Veinte"},
+            {21, "Veintiuno"},
+            {22, "Veintidos"},
+            {23, "Veintitres"},
+            {24, "Veinticuatro"},
+            {25, "Veinticinco"},
+            {26, "Veintiseis"},
+            {27, "Veintisiete"},
+            {28, "Veintiocho"},
+            {29, "Veintinueve"},
+            {30, "Treinta"},
+            {40, "Cuarenta"},
+            {50, "Cincuenta"},
+            {60, "Sesenta"},
+            {70, "Setenta"},
+            {80, "Ochenta"},
+            {90, "Noventa"},
+            {100, "Cien"},
+            {200, "Doscientos"},
+            {300, "Trescientos"},
+            {400, "Cuatrocientos"},
+            {500, "Quinientos"},
+            {600, "Seiscientos"},
+            {700, "Setecientos"},
+            {800, "Ochocientos"},
+            {900, "Novecientos"}
+        };
+
         public void GetQRCode()
         {
         }
@@ -156,51 +206,50 @@ namespace SFVBolivia.Helpers
         /// <returns>literal of a number.</returns>
         public string ConvertToLiteral(int number) {
             StringBuilder result = new StringBuilder();
-            Dictionary<int, string> seedNumbers = GetSeedNumbers();
 
             int partialNumber, exponent;
             while (number > 0) {
-                exponent = CountDigits(number) - 1;
-                
-                if(seedNumbers.ContainsKey(number)) {
+                exponent = number.ToString().Length - 1;
+
+                if (seedNumbers.ContainsKey(number)) {
                     result.Append(seedNumbers[number]);
                 } else {
                     partialNumber = number / ((int) System.Math.Pow(10, exponent)) * ((int) System.Math.Pow(10, exponent));
-                    
-                    if (IsMillionUnit(partialNumber)) {
-                        string millionUnit = ConvertToLiteral(number/1000000);
-                        string millionUnitLiteral = (millionUnit.Equals("Uno"))? " Millon " : " Millones ";
-                        result.Append(millionUnit).Append(millionUnitLiteral);
-                        number = number % 1000000;
-                    } else if (IsThousandUnit(partialNumber)) {
-                        result.Append(ConvertToLiteral(number/1000)).Append(" Mil ");
-                        number = number % 1000;
-                    } else if (IsTens(number)) {
-                        result.Append(seedNumbers[partialNumber]).Append(" y ");
-                    } else {
-                        result.Append(seedNumbers[(partialNumber)]).Append(" ");
-                    }
+                    result.Append(BuildingThePartialNumber(ref number, partialNumber));
                 }
 
-                number = number % ((int) System.Math.Pow(10, exponent));
+                number = number % ((int)System.Math.Pow(10, exponent));
             }
 
             return result.ToString();
         }
 
-        /// <summary>
-        /// Count the number digits.
-        /// </summary>
-        /// <param name="number">is the number to counts.</param>
-        /// <returns>the quantity of digits.</returns>
-        private int CountDigits(int number) {
-            int count = 0;
-            while(number != 0){
-                number /= 10;
-                count ++;
+        private string BuildingThePartialNumber(ref int number, int partialNumber)
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (IsMillionUnit(partialNumber))
+            {
+                string millionUnit = ConvertToLiteral(number / 1000000);
+                string millionUnitLiteral = (millionUnit.Equals("Uno")) ? " Millon " : " Millones ";
+                result.Append(millionUnit).Append(millionUnitLiteral);
+                number = number % 1000000;
+            }
+            else if (IsThousandUnit(partialNumber))
+            {
+                result.Append(ConvertToLiteral(number / 1000)).Append(" Mil ");
+                number = number % 1000;
+            }
+            else if (IsTens(number))
+            {
+                result.Append(seedNumbers[partialNumber]).Append(" y ");
+            }
+            else
+            {
+                result.Append(seedNumbers[(partialNumber)]).Append(" ");
             }
 
-            return count;
+            return result.ToString();
         }
 
         /// <summary>
@@ -231,56 +280,6 @@ namespace SFVBolivia.Helpers
         private bool IsMillionUnit(int number)
         {
             return (number / 1000000) != 0;
-        }
-
-        /// <summary>
-        /// Fill a dictionary with specific values.
-        /// </summary>
-        /// <returns>the dictionary filled.</returns>
-        private Dictionary<int, string> GetSeedNumbers() {
-            Dictionary<int, string> numbers = new Dictionary<int, string>();
-            numbers.Add(0, "Cero");
-            numbers.Add(1, "Uno");
-            numbers.Add(2, "Dos");
-            numbers.Add(3, "Tres");
-            numbers.Add(4, "Cuatro");
-            numbers.Add(5, "Cinco");
-            numbers.Add(6, "Seis");
-            numbers.Add(7, "Siete");
-            numbers.Add(8, "Ocho");
-            numbers.Add(9, "Nueve");
-            numbers.Add(10, "Diez");
-
-            numbers.Add(11, "Once");
-            numbers.Add(12, "Doce");
-            numbers.Add(13, "Trece");
-            numbers.Add(14, "Catorce");
-            numbers.Add(15, "Quince");
-            numbers.Add(16, "Dieciseis");
-            numbers.Add(17, "Diecisiete");
-            numbers.Add(18, "Dieciocho");
-            numbers.Add(19, "Diecinueve");
-
-            numbers.Add(20, "Veinte");
-            numbers.Add(30, "Treinta");
-            numbers.Add(40, "Cuarenta");
-            numbers.Add(50, "Cincuenta");
-            numbers.Add(60, "Sesenta");
-            numbers.Add(70, "Setenta");
-            numbers.Add(80, "Ochenta");
-            numbers.Add(90, "Noventa");
-
-            numbers.Add(100, "Cien");
-            numbers.Add(200, "Doscientos");
-            numbers.Add(300, "Trescientos");
-            numbers.Add(400, "Cuatrocientos");
-            numbers.Add(500, "Quinientos");
-            numbers.Add(600, "Seiscientos");
-            numbers.Add(700, "Setecientos");
-            numbers.Add(800, "Ochocientos");
-            numbers.Add(900, "Novecientos");
-           
-            return numbers;
         }
     }
 }

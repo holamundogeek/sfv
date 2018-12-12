@@ -8,7 +8,7 @@ namespace SFVBoliviaTest
     public class SFVBoliviaHelperTest
     {
         private SFVBoliviaHelper helper = new SFVBoliviaHelper();
-       
+
         [TestMethod]
         public void GetVerhoeffCheckDigitCaseOneValueTest()
         {
@@ -173,7 +173,7 @@ namespace SFVBoliviaTest
         }
 
         [TestMethod]
-        public void GetLiteralNumberFromAnTensTest()
+        public void GetLiteralNumberFromATensTest()
         {
             string actualLiteral = helper.ConvertToLiteral(83);
             string expectedLiteral = "Ochenta y Tres";
