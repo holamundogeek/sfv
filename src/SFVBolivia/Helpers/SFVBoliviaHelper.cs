@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
+using QRCoder;
 
 namespace SFVBolivia.Helpers
 {
@@ -36,6 +38,7 @@ namespace SFVBolivia.Helpers
 
         private int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
 
+<<<<<<< HEAD
         private Dictionary<int, string> seedNumbers = new Dictionary<int, string>
         {
             {0, "Cero"},
@@ -89,6 +92,8 @@ namespace SFVBolivia.Helpers
         public void GetQRCode()
         {
         }
+=======
+>>>>>>> develop
 
         public void GetText()
         {
@@ -104,6 +109,26 @@ namespace SFVBolivia.Helpers
         {
             int[] state = Enumerable.Range(0, 256).ToArray();
             return MessageCipher(message, KeyCipher(key, state));
+        }
+
+
+        /// <summary>
+        /// This method generate QRCodeImage as of String value send it as parameter.
+        /// </summary>
+        /// <param name="value">through this String QRCode will be created</param>
+        /// <returns>if String value is not null/empty return Bitmap entity, otherwise throw ArgumentException</returns>
+        public Bitmap GetQRCode(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new System.ArgumentException("String value: " + value + " " + "should not be null or empty.");
+            }
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+            return qrCodeImage;
         }
 
         /// <summary>
