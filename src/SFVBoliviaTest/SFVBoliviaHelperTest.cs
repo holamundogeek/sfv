@@ -155,7 +155,7 @@ namespace SFVBoliviaTest
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
         }
 
-       [TestMethod]
+        [TestMethod]
         public void GetFinalAllegedRC4Test()
         {
             int[] partialSumsArray = new int[] { 1548, 1537, 1540, 1565, 1530 };
@@ -164,6 +164,70 @@ namespace SFVBoliviaTest
             string actualMessageCiffer = SFVBoliviaExtensions.GetFinalAllegedRC4(verhoeffDigits, partialSumsArray, dosingKey);
             string expectedMessageCiffer = "6A-DC-53-05-14";
             Assert.AreEqual(expectedMessageCiffer, actualMessageCiffer);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromADigitTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(8);
+            string expectedLiteral = "Ocho";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromATensTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(83);
+            string expectedLiteral = "Ochenta y Tres";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(953);
+            string expectedLiteral = "Novecientos Cincuenta y Tres";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(500);
+            string expectedLiteral = "Quinientos";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromThousandUnitTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(10084);
+            string expectedLiteral = "Diez Mil Ochenta y Cuatro";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromOtherThousandUnitTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(537020);
+            string expectedLiteral = "Quinientos Treinta y Siete Mil Veinte";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromAlmostMillionUnitTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(999999);
+            string expectedLiteral = "Novecientos Noventa y Nueve Mil Novecientos Noventa y Nueve";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
+        }
+
+        [TestMethod]
+        public void GetLiteralNumberFromMillionUnitTest()
+        {
+            string actualLiteral = helper.ConvertToLiteral(845520767);
+            string expectedLiteral = "Ochocientos Cuarenta y Cinco Millones Quinientos Veinte Mil Setecientos Sesenta y Siete";
+            Assert.AreEqual(expectedLiteral, actualLiteral);
         }
 
         [TestMethod]

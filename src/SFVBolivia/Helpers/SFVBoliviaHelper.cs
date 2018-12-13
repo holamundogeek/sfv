@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Drawing;
 using QRCoder;
@@ -36,7 +37,59 @@ namespace SFVBolivia.Helpers
                                         'y', 'z', '+', '/'};
 
         private int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
+        private Dictionary<int, string> seedNumbers = new Dictionary<int, string>
+        {
+            {0, "Cero"},
+            {1, "Uno"},
+            {2, "Dos"},
+            {3, "Tres"},
+            {4, "Cuatro"},
+            {5, "Cinco"},
+            {6, "Seis"},
+            {7, "Siete"},
+            {8, "Ocho"},
+            {9, "Nueve"},
+            {10, "Diez"},
+            {11, "Once"},
+            {12, "Doce"},
+            {13, "Trece"},
+            {14, "Catorce"},
+            {15, "Quince"},
+            {16, "Dieciseis"},
+            {17, "Diecisiete"},
+            {18, "Dieciocho"},
+            {19, "Diecinueve"},
+            {20, "Veinte"},
+            {21, "Veintiuno"},
+            {22, "Veintidos"},
+            {23, "Veintitres"},
+            {24, "Veinticuatro"},
+            {25, "Veinticinco"},
+            {26, "Veintiseis"},
+            {27, "Veintisiete"},
+            {28, "Veintiocho"},
+            {29, "Veintinueve"},
+            {30, "Treinta"},
+            {40, "Cuarenta"},
+            {50, "Cincuenta"},
+            {60, "Sesenta"},
+            {70, "Setenta"},
+            {80, "Ochenta"},
+            {90, "Noventa"},
+            {100, "Cien"},
+            {200, "Doscientos"},
+            {300, "Trescientos"},
+            {400, "Cuatrocientos"},
+            {500, "Quinientos"},
+            {600, "Seiscientos"},
+            {700, "Setecientos"},
+            {800, "Ochocientos"},
+            {900, "Novecientos"}
+        };
 
+        public void GetQRCode()
+        {
+        }
 
         public void GetText()
         {
@@ -165,6 +218,89 @@ namespace SFVBolivia.Helpers
             state[index1] = temp;
 
             return state;
+        }
+
+        /// <summary>
+        /// Convert a number to literal.
+        /// </summary>
+        /// <param name="number">is the number to converts.</param>
+        /// <returns>literal of a number.</returns>
+        public string ConvertToLiteral(int number) {
+            StringBuilder result = new StringBuilder();
+
+            int partialNumber, exponent;
+            while (number > 0) {
+                exponent = number.ToString().Length - 1;
+
+                if (seedNumbers.ContainsKey(number)) {
+                    result.Append(seedNumbers[number]);
+                } else {
+                    partialNumber = number / ((int) System.Math.Pow(10, exponent)) * ((int) System.Math.Pow(10, exponent));
+                    result.Append(BuildingThePartialNumber(ref number, partialNumber));
+                }
+
+                number = number % ((int)System.Math.Pow(10, exponent));
+            }
+
+            return result.ToString();
+        }
+
+        private string BuildingThePartialNumber(ref int number, int partialNumber)
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (IsMillionUnit(partialNumber))
+            {
+                string millionUnit = ConvertToLiteral(number / 1000000);
+                string millionUnitLiteral = (millionUnit.Equals("Uno")) ? " Millon " : " Millones ";
+                result.Append(millionUnit).Append(millionUnitLiteral);
+                number = number % 1000000;
+            }
+            else if (IsThousandUnit(partialNumber))
+            {
+                result.Append(ConvertToLiteral(number / 1000)).Append(" Mil ");
+                number = number % 1000;
+            }
+            else if (IsTens(number))
+            {
+                result.Append(seedNumbers[partialNumber]).Append(" y ");
+            }
+            else
+            {
+                result.Append(seedNumbers[(partialNumber)]).Append(" ");
+            }
+
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Verify if a number is a tens.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a tens, otherwise false.</returns>
+        private bool IsTens(int number)
+        {
+            return (number / 10 < 10) && (number / 10) != 0;
+        }
+
+        /// <summary>
+        /// Verify if a number is a thousand unit.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a thousand unit, otherwise false.</returns>
+        private bool IsThousandUnit(int number)
+        {
+            return (number / 1000) != 0;
+        }
+
+        /// <summary>
+        /// Verify if a number is a million unit.
+        /// </summary>
+        /// <param name="number">is the number to verify.</param>
+        /// <returns>true if the number is a million unit, otherwise false.</returns>
+        private bool IsMillionUnit(int number)
+        {
+            return (number / 1000000) != 0;
         }
     }
 }
