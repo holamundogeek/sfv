@@ -244,9 +244,9 @@ namespace SFVBoliviaTest
             UserIssuer userIssuer = new UserIssuer("Graciela Loayza", 352687016, "Av. Siles 2018");
             Bill bill = new Bill(billNumber, authorization, date, amount, amountFiscalCredit,
             controlCode, nITRecep, userIssuer);
-           
+
             // When
-            Bitmap qrCode = helper.GetQRCode(bill.ToString());
+            Bitmap qrCode = SFVBoliviaHelper.GetQRCode(bill.ToString());
 
             // Then
             Assert.IsInstanceOfType(qrCode, typeof(Bitmap));
@@ -260,7 +260,7 @@ namespace SFVBoliviaTest
             string emptyString = null;
 
             // Then
-            Bitmap qrCode = helper.GetQRCode(emptyString);
+            Bitmap qrCode = SFVBoliviaHelper.GetQRCode(emptyString);
         }
     }
 }

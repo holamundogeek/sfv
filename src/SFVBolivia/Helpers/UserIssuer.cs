@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace SFVBolivia.Helpers
 {
-    public class UserIssuer : User
+    internal class UserIssuer : User
     {
+        internal string Address { get; set; }
 
-        public string Address { get; set; }
-
-        public UserIssuer(string name, long nIT,  string address)
+        internal UserIssuer(string name, long NIT, string address)
         {
             this.Name = name;
-            this.NIT = nIT;
+            this.NIT = NIT;
             this.Address = address;
         }
-
-       
     }
 }

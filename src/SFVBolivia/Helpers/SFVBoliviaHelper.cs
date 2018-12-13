@@ -3,10 +3,12 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using QRCoder;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("SFVBoliviaTest")]
 namespace SFVBolivia.Helpers
 {
-    public class SFVBoliviaHelper
+    internal class SFVBoliviaHelper
     {
         private int[,] multiply = { { 0,1,2,3,4,5,6,7,8,9 },
                                     { 1,2,3,4,0,6,7,8,9,5 },
@@ -101,7 +103,7 @@ namespace SFVBolivia.Helpers
         /// <param name="message"> Message to cipher.</param>
         /// <param name="key"> Key to cipher.</param>
         /// <returns>A Cipher text.</returns>
-        public string GetRC4Ciphertext(string message, string key)
+        internal string GetRC4Ciphertext(string message, string key)
         {
             int[] state = Enumerable.Range(0, 256).ToArray();
             return MessageCipher(message, KeyCipher(key, state));
@@ -113,7 +115,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="value">through this String QRCode will be created</param>
         /// <returns>if String value is not null/empty return Bitmap entity, otherwise throw ArgumentException</returns>
-        public Bitmap GetQRCode(string value)
+        internal static Bitmap GetQRCode(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -132,7 +134,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number"> Number to generate.</param>
         /// <returns>A Verhoeef digit.</returns>
-        public int GetVerhoeffCheckDigit(string number)
+        internal int GetVerhoeffCheckDigit(string number)
         {
             int lastindex = number.Length - 1;
             int check = 0;
@@ -150,7 +152,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">Number to be encoded.</param>
         /// <returns>Base64 encoded string.</returns>
-        public string GetBase64(int number)
+        internal string GetBase64(int number)
         {
             int quotient = number;
             StringBuilder encodedResult = new StringBuilder();

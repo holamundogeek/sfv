@@ -6,28 +6,26 @@ using System.Threading.Tasks;
 
 namespace SFVBolivia.Helpers
 {
-    public class Bill
+    internal class Bill
     {
-   
-        public int BillNumber { get; set; }
 
-        public long Authorization { get; set; }
+        private int BillNumber { get; set; }
 
-        public DateTime Date { get; set; }
+        private long Authorization { get; set; }
 
-        public double Amount { get; set; }
+        private DateTime Date { get; set; }
 
-        public double AmountFiscalCredit { get; set; }
+        private double Amount { get; set; }
 
-        public string ControlCode { get; set; }
+        private double AmountFiscalCredit { get; set; }
 
-        public long NITRecep { get; set; }
+        private string ControlCode { get; set; }
 
-        public UserIssuer UserIssuer { get; set; }
+        private long NITRecep { get; set; }
 
-
-
-        public Bill(int billNumber, long authorization, DateTime date, 
+        private UserIssuer UserIssuer { get; set; }
+        
+        internal Bill(int billNumber, long authorization, DateTime date,
             double amount, double amountFiscalCredit, string controlCode, long nITRecep, UserIssuer userIssuer)
         {
             this.BillNumber = billNumber;
@@ -49,6 +47,5 @@ namespace SFVBolivia.Helpers
         {
             return $"{this.BillNumber}|{this.BillNumber}|{this.Date}|{this.Amount}|{this.AmountFiscalCredit}|{this.ControlCode}|{this.NITRecep}|{this.UserIssuer}";
         }
-
     }
 }

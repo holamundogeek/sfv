@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SFVBolivia.Helpers;
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SFVBoliviaTest
 {
@@ -18,10 +20,11 @@ namespace SFVBoliviaTest
             int expectedLenght = 5;
 
             // When
-            string verhoeffDigit = SFVBoliviaExtensions.AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            string nitOrCiFormatted;
+            string verhoeffDigits = SFVBoliviaExtensions.GetVerhoeffDigits(ref invoiceNumber, ref nitOrCi, ref transactionDate, ref transactionAmount, out nitOrCiFormatted);
 
             // Then
-            Assert.AreEqual(expectedLenght, verhoeffDigit.Length);
+            Assert.AreEqual(expectedLenght, verhoeffDigits.Length);
         }
 
         [TestMethod]
@@ -35,10 +38,11 @@ namespace SFVBoliviaTest
             string expectedNumber = "71621";
 
             // When
-            string verhoeffDigit = SFVBoliviaExtensions.AddVerhoeffDigits(invoiceNumber, nitOrCi, transactionDate, transactionAmount);
+            string nitOrCiFormatted;
+            string verhoeffDigits = SFVBoliviaExtensions.GetVerhoeffDigits(ref invoiceNumber, ref nitOrCi, ref transactionDate, ref transactionAmount, out nitOrCiFormatted);
 
             // Then
-            Assert.AreEqual(expectedNumber, verhoeffDigit);
+            Assert.AreEqual(expectedNumber, verhoeffDigits);
         }
     }
 }
