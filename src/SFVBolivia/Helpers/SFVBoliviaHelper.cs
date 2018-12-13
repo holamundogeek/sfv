@@ -39,7 +39,7 @@ namespace SFVBolivia.Helpers
                                         'y', 'z', '+', '/'};
 
         private int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
-        private Dictionary<int, string> seedNumbers = new Dictionary<int, string>
+        private static Dictionary<int, string> seedNumbers = new Dictionary<int, string>
         {
             {0, "Cero"},
             {1, "Uno"},
@@ -227,7 +227,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to converts.</param>
         /// <returns>literal of a number.</returns>
-        public string ConvertToLiteral(int number) {
+        public static string ConvertToLiteral(int number) {
             StringBuilder result = new StringBuilder();
 
             int partialNumber, exponent;
@@ -247,7 +247,7 @@ namespace SFVBolivia.Helpers
             return result.ToString();
         }
 
-        private string BuildingThePartialNumber(ref int number, int partialNumber)
+        private static string BuildingThePartialNumber(ref int number, int partialNumber)
         {
             StringBuilder result = new StringBuilder();
 
@@ -280,7 +280,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a tens, otherwise false.</returns>
-        private bool IsTens(int number)
+        private static bool IsTens(int number)
         {
             return (number / 10 < 10) && (number / 10) != 0;
         }
@@ -290,7 +290,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a thousand unit, otherwise false.</returns>
-        private bool IsThousandUnit(int number)
+        private static bool IsThousandUnit(int number)
         {
             return (number / 1000) != 0;
         }
@@ -300,7 +300,7 @@ namespace SFVBolivia.Helpers
         /// </summary>
         /// <param name="number">is the number to verify.</param>
         /// <returns>true if the number is a million unit, otherwise false.</returns>
-        private bool IsMillionUnit(int number)
+        private static bool IsMillionUnit(int number)
         {
             return (number / 1000000) != 0;
         }

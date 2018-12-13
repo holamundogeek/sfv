@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SFVBolivia.Helpers;
 
 namespace SFVBolivia
 {
@@ -21,7 +18,7 @@ namespace SFVBolivia
         /// <returns>Control code generated as string.</returns>
         public static string GetCodeControl(long authorizationNumber, long invoiceNumber, long nitOrCi, long transactionDate, double transactionAmount, string dosingKey)
         {
-            return Helpers.SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
+            return SFVBoliviaExtensions.GetCodeControl(authorizationNumber, invoiceNumber, nitOrCi, transactionDate, transactionAmount, dosingKey);
         }
 
         /// <summary>
@@ -29,13 +26,16 @@ namespace SFVBolivia
         /// </summary>
         /// <param name="value">Text to be encoded.</param>
         /// <returns>QR code bitmap generated.</returns>
-        public static Bitmap GetQRCode(string value)
+        public static Bitmap GetQRCode(int billNumber, long authorization, DateTime transactionDate, double transactionAmount, double amountFiscalCredit, string controlCode, long nitOrCiRecep, UserIssuer userIssuer)
         {
-            return Helpers.SFVBoliviaHelper.GetQRCode(value);
+            Bill bill = new Bill(billNumber, authorization, transactionDate, transactionAmount, amountFiscalCredit, controlCode, nitOrCiRecep, userIssuer);
+
+            return SFVBoliviaHelper.GetQRCode(bill.ToString());
         }
 
-        public static void GetText()
+        public static string GetText(int transactionAmount)
         {
+            return SFVBoliviaHelper.ConvertToLiteral(transactionAmount);
         }
     }
 }

@@ -169,15 +169,15 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromADigitTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(8);
-            string expectedLiteral = "Ocho";
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(8);
+            string expectedLiteral = "Ocho 00/100";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
 
         [TestMethod]
         public void GetLiteralNumberFromATensTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(83);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(83);
             string expectedLiteral = "Ochenta y Tres";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -185,7 +185,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(953);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(953);
             string expectedLiteral = "Novecientos Cincuenta y Tres";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -193,7 +193,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(500);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(500);
             string expectedLiteral = "Quinientos";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -201,7 +201,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromThousandUnitTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(10084);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(10084);
             string expectedLiteral = "Diez Mil Ochenta y Cuatro";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -209,7 +209,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromOtherThousandUnitTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(537020);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(537020);
             string expectedLiteral = "Quinientos Treinta y Siete Mil Veinte";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -217,7 +217,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromAlmostMillionUnitTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(999999);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(999999);
             string expectedLiteral = "Novecientos Noventa y Nueve Mil Novecientos Noventa y Nueve";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
@@ -225,7 +225,7 @@ namespace SFVBoliviaTest
         [TestMethod]
         public void GetLiteralNumberFromMillionUnitTest()
         {
-            string actualLiteral = helper.ConvertToLiteral(845520767);
+            string actualLiteral = SFVBoliviaHelper.ConvertToLiteral(845520767);
             string expectedLiteral = "Ochocientos Cuarenta y Cinco Millones Quinientos Veinte Mil Setecientos Sesenta y Siete";
             Assert.AreEqual(expectedLiteral, actualLiteral);
         }
